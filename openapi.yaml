@@ -1,0 +1,815 @@
+openapi: 3.0.2
+info:
+  title: Email template API
+  version: 1.0.0-RFC
+  description: |
+    Email template API service
+tags:
+- name: Email templates
+  description: Email template service
+- name: Variables
+  description: null
+security:
+- EpilotAuth: []
+- AsOrganization: []
+- EpilotOrg: []
+paths:
+  /v1/email-template/templates:
+    post:
+      operationId: saveTemplate
+      summary: saveTemplate
+      description: Create or update a template. If `id` is provided, it will update the template.
+      tags:
+      - Email templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailTemplateRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateEntity'
+        '403':
+          description: Forbidden
+  /v1/email-template/templates/{id}:
+    get:
+      operationId: getTemplateDetail
+      summary: getTemplateDetail
+      description: Get email template by ID
+      tags:
+      - Email templates
+      parameters:
+      - name: id
+        description: Template entity ID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateResponse'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/email-template/templates:replace:
+    post:
+      operationId: replaceVariables
+      summary: replaceVariables
+      description: Get template detail and replace all variables (template variables and document generation)
+      tags:
+      - Variables
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email_template_id
+              properties:
+                email_template_id:
+                  type: string
+                  example: 511ceb90-f738-47aa-8b1e-915ace0ae13c
+                variable_parameters:
+                  $ref: '#/components/schemas/VariableParameters'
+                skip_document_generation:
+                  type: boolean
+                  description: |
+                    If true then skip document generation. This is useful when you want to replace html variables only. Speeds up the process.
+                  default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplateResponse'
+        '403':
+          description: Forbidden
+  /v1/email-template/templates:replaceAsync:
+    post:
+      operationId: replaceVariablesAsync
+      summary: replaceVariablesAsync
+      description: |
+        This endpoint allows to initiate an asynchronous process in replacing the template details & generating the documents.
+        On initial request, a jobId and STARTED status are returned. Subsequent requests can use this jobId to poll for the resolved template.
+        If still processing, it returns the jobId and IN-PROGRESS status. Upon completion or failure, it returns the final template or a failure status with reason.
+      tags:
+      - Variables
+      parameters:
+      - in: query
+        name: job_id
+        description: Job ID for tracking the status of document generation action
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_template_id:
+                  type: string
+                  example: 511ceb90-f738-47aa-8b1e-915ace0ae13c
+                variable_parameters:
+                  $ref: '#/components/schemas/VariableParameters'
+                skip_document_generation:
+                  type: boolean
+                  description: |
+                    If true then skip document generation. This is useful when you want to replace html variables only. Speeds up the process.
+                  default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncEmailTemplateResponse'
+        '403':
+          description: Forbidden
+  /v1/email-template/templates:bulkSendMessage:
+    post:
+      operationId: bulkSendMessage
+      summary: bulkSendMessage
+      description: Send emails to multiple recipients using a template
+      tags:
+      - Email templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - type: object
+                required:
+                - email_template_id
+                - recipient_query
+                properties:
+                  email_template_id:
+                    type: string
+                    description: ID of email template to use for sending bulk emails
+                    example: 511ceb90-f738-47aa-8b1e-915ace0ae13c
+                  recipient_query:
+                    type: string
+                    description: Entity search query to select recipients
+                    example: _schema:contact AND consent_email_marketing:active
+              - $ref: '#/components/schemas/BulkSendMessageRequest'
+              - type: object
+                required:
+                - job_id
+                properties:
+                  job_id:
+                    type: string
+                    description: Job ID for tracking the status of a bulk message request
+                    example: 8c086140-f33e-4bb7-a993-50c0f2402c7b
+                  action:
+                    type: string
+                    description: Provide CANCEL to stop the bulk message request
+                    enum:
+                    - CANCEL
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkSendMessageJob'
+        '403':
+          description: Forbidden
+  /v1/email-template/templates:revert:
+    post:
+      operationId: revertToOriginalTemplate
+      summary: revertToOriginalTemplate
+      description: Revert to the original system generated email template
+      tags:
+      - Email templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email_template_id
+              properties:
+                email_template_id:
+                  type: string
+                  example: 511ceb90-f738-47aa-8b1e-915ace0ae13c
+      responses:
+        '200':
+          description: Success
+        '403':
+          description: Forbidden
+components:
+  securitySchemes:
+    EpilotAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Epilot Bearer Custom Authorization Token
+
+        ```
+        btoa(JSON.stringify(
+            {
+                idtoken: $idToken,
+                accesstoken: $accessToken
+            }
+        ))
+        ```
+    AsOrganization:
+      type: apiKey
+      in: header
+      name: x-ivy-org-id
+      description: Set organization id when using internal auth
+    EpilotOrg:
+      description: Overrides the target organization to allow shared tenant access
+      name: x-epilot-org-id
+      in: header
+      type: apiKey
+  schemas:
+    BaseEntity:
+      type: object
+      required:
+      - _id
+      - _title
+      - _org
+      - _schema
+      - _created_at
+      - _updated_at
+      properties:
+        _id:
+          type: string
+          description: Entity ID
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        _title:
+          type: string
+          description: Entity title
+        _org:
+          type: string
+          description: Ivy Organization ID the entity belongs to
+          example: '206801'
+        _schema:
+          type: string
+          description: URL-friendly identifier for the entity schema
+          example: message
+        _tags:
+          type: array
+          description: Entity tags
+          items:
+            type: string
+          example:
+          - automatic email template
+        _created_at:
+          type: string
+          description: Created date
+          format: date-time
+          example: 2021-02-09T12:41:43.662Z
+        _updated_at:
+          type: string
+          description: Updated date
+          format: date-time
+          example: 2021-02-10T09:14:31.990Z
+    EmailTemplateRequest:
+      type: object
+      required:
+      - name
+      - subject
+      properties:
+        _id:
+          type: string
+          example: cd7809ba-a111-4dd9-8d15-18eb4de0faed
+        _tags:
+          type: array
+          description: Entity tags
+          items:
+            type: string
+          example:
+          - template
+        name:
+          description: name
+          type: string
+          example: Order confirmation
+        brand_id:
+          description: Brand ID. Equal 0 if available for All brands
+          type: number
+          nullable: true
+          example: 0
+        from:
+          description: From
+          $ref: '#/components/schemas/From'
+        to:
+          description: To
+          type: array
+          items:
+            $ref: '#/components/schemas/To'
+        cc:
+          description: Cc
+          type: array
+          items:
+            $ref: '#/components/schemas/To'
+        bcc:
+          description: Bcc
+          type: array
+          items:
+            $ref: '#/components/schemas/To'
+        subject:
+          description: Subject
+          type: string
+          example: We have received your order!
+        body:
+          description: Body
+          type: string
+          example: Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly
+        attachments:
+          type: array
+          nullable: true
+          description: Email template attachments
+          items:
+            $ref: '#/components/schemas/Attachment'
+        file:
+          type: object
+          properties:
+            $relation:
+              type: array
+              description: Entity tags
+              items:
+                type: object
+        system_template:
+          description: >
+            If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
+
+            Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to
+            original feature
+          type: boolean
+          example: false
+        created_by:
+          description: Created by
+          type: number
+          example: 1234
+        updated_by:
+          description: Updated by
+          type: number
+          example: 1234
+    EmailTemplateEntity:
+      allOf:
+      - $ref: '#/components/schemas/BaseEntity'
+      - type: object
+        required:
+        - name
+        properties:
+          name:
+            description: name
+            type: string
+            example: Order confirmation
+          brand_id:
+            description: Brand ID. Equal 0 if available for All brands
+            type: number
+            nullable: true
+            example: 0
+          from:
+            description: From
+            $ref: '#/components/schemas/From'
+          to:
+            description: To
+            type: array
+            items:
+              $ref: '#/components/schemas/To'
+          cc:
+            description: Cc
+            type: array
+            items:
+              $ref: '#/components/schemas/To'
+          bcc:
+            description: Bcc
+            type: array
+            items:
+              $ref: '#/components/schemas/To'
+          subject:
+            description: Subject
+            type: string
+            example: We have received your order!
+          body:
+            description: Body
+            type: string
+            example: Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly
+          attachments:
+            type: array
+            nullable: true
+            description: Email template attachments
+            items:
+              $ref: '#/components/schemas/Attachment'
+          file:
+            type: object
+            properties:
+              $relation:
+                type: array
+                description: Entity tags
+                items:
+                  type: object
+          created_by:
+            description: Created by
+            type: number
+            example: 1234
+          updated_by:
+            description: Updated by
+            type: number
+            example: 1234
+          system_template:
+            description: |
+              If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
+              Remember to add default content of template to system_template enum for revert to original feature
+            type: boolean
+            example: false
+    Attachment:
+      type: object
+      nullable: true
+      required:
+      - filename
+      - size
+      - content_type
+      - bucket
+      - object_key
+      properties:
+        cid:
+          type: string
+          description: Attachment ID
+          example: f820ce3b-07b0-45ae-bcc6-babb2f53f79f
+        filename:
+          type: string
+          description: File name
+          example: Produktinformationen_epilot360_Double_Opt_in.pdf
+        size:
+          type: number
+          description: File size in bytes
+          example: 451349
+        content_type:
+          type: string
+          description: Content type
+          example: application/pdf
+        url:
+          type: string
+          description: URL to download the attachment.
+          example: https://go.epilot.cloud/attachments/3e7c616a-3e89-4f92-b4c5-ea5ab140e3dd/Produktinformationen_epilot360_Double_Opt_in.pdf
+        bucket:
+          type: string
+          description: S3 bucket where file is stored
+          example: 893487340562-message-attachment
+        object_key:
+          type: string
+          description: S3 object apiKey
+          example: attachments/3e7c616a-3e89-4f92-b4c5-ea5ab140e3dd/Produktinformationen_epilot360_Double_Opt_in.pdf
+        inline:
+          type: boolean
+          description: |
+            If true then this attachment should not be offered for download (at least not in the main attachments list).\
+            The usecase is CID embedded image (aka inline image).
+          default: false
+        send_as_link:
+          type: boolean
+          description: If true then this attachment is sent via link. The link is already inserted to email body by API caller. In this case, service doesn't process this attachment.
+          default: false
+        type:
+          type: string
+          description: File type such as Document template, Document,... Use for replace variables on document template
+          example: Document template
+        copy_to_message:
+          type: boolean
+          description: If true then this attachment is copied to the message and replaces corresponding one
+          default: true
+    From:
+      type: object
+      required:
+      - name
+      - email
+      properties:
+        name:
+          type: string
+          example: epilot
+        email:
+          type: string
+          example: no-reply@epilot.cloud
+    To:
+      type: object
+      required:
+      - name
+      - email
+      properties:
+        name:
+          type: string
+          example: Ny Huynh
+        email:
+          type: string
+          example: ny.huynh@axonactive.com
+    PresignedRequest:
+      type: object
+      required:
+      - id
+      - filename
+      - content_type
+      properties:
+        id:
+          description: UUID
+          type: string
+          example: 8c086140-f33e-4bb7-a993-50c0f2402c7b
+        filename:
+          description: File name
+          type: string
+          example: order.pdf
+        content_type:
+          description: Content type
+          type: string
+          example: application/pdf
+    PresignedResponse:
+      type: object
+      required:
+      - download_url
+      - upload_url
+      properties:
+        download_url:
+          type: string
+          description: URL to download the attachment. This URL is not accessible until attachment is uploaded successfully.
+          example: https://go.epilot.cloud/attachments/3e7c616a-3e89-4f92-b4c5-ea5ab140e3dd/Produktinformationen_epilot360_Double_Opt_in.pdf
+        upload_url:
+          description: Post presigned URL to upload file
+          type: object
+          required:
+          - url
+          - fields
+          properties:
+            url:
+              type: number
+              description: URL to upload the attachment
+              example: https://s3.eu-central-1.amazonaws.com/893487340562-message-attachment
+            fields:
+              type: object
+              description: Fields are provided by AWS to authenticate and validate the request. All fields should be included in form-data when performing upload request.
+              example: {}
+    AttachmentResponse:
+      type: object
+      properties:
+        total:
+          description: Total attachments
+          type: number
+          example: 10
+        attachments:
+          description: List attachments
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                description: File name
+                type: string
+                example: order.docx
+              bucket:
+                description: Bucket name
+                type: string
+                example: epilot-playground-upload-document
+              object_key:
+                description: Object key
+                type: string
+                example: 9f561bea-f0d9-4e96-b7a9-879fc1643ac0.docx
+              url:
+                description: URL
+                type: string
+                example: https://epilot-playground-upload-document.s3.eu-central-1.amazonaws.com/9f561bea-f0d9-4e96-b7a9-879fc1643ac0.docx
+              document_type:
+                description: |
+                  Document type:
+                  * 0: Static docs
+                  * 1: Templates
+                type: number
+                example: 0
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        organization_id:
+          type: string
+        display_name:
+          type: string
+          description: 'User''s display name (default: email address)'
+          example: Example User
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          nullable: true
+          example: 1234567890
+        preferred_language:
+          type: string
+          example: de
+        image_uri:
+          type: object
+          additionalProperties: true
+          properties:
+            original:
+              type: string
+              format: uri
+            thumbnail_32:
+              type: string
+              format: uri
+          example:
+            original: https://account-profile-images.epilot.cloud/1/avatar.png
+            thumbnail_32: https://account-profile-images.epilot.cloud/1/avatar_32x32.png
+        properties:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: profileImageName
+              value:
+                type: string
+                example: avatar.png
+            required:
+            - name
+            - value
+    VariableParameters:
+      type: object
+      properties:
+        template_type:
+          $ref: '#/components/schemas/TemplateType'
+        language:
+          type: string
+          enum:
+          - en
+          - de
+        main_entity_id:
+          type: string
+          description: The main entity ID. Use main entity in order to use the variable without schema slug prefix - or just pass directly to other object ID.
+          example: 63753437-c9e2-4e83-82bb-b1c666514561
+        user_id:
+          type: string
+          description: User ID
+          example: '123452'
+        custom_variables:
+          type: array
+          items:
+            type: object
+            properties:
+              variable:
+                type: string
+                description: Template Variable Name
+                example: '{{abc.xyz}}'
+              value:
+                type: string
+                description: Value to be Replaced
+                example: ReplacedValue
+      required:
+      - template_type
+    TemplateType:
+      type: string
+      enum:
+      - email
+      - document
+    EmailTemplateResponse:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/EmailTemplateEntity'
+        relations:
+          type: array
+          items:
+            type: object
+    AsyncEmailTemplateResponse:
+      type: object
+      required:
+      - job_id
+      - status
+      properties:
+        job_id:
+          type: string
+          description: Job ID of the email template that is requested to replace and generate docs
+          example: 8c086140-f33e-4bb7-a993-50c0f2402c7b
+        status:
+          type: string
+          enum:
+          - STARTED
+          - PROCESSING
+          - SUCCESS
+          - FAILED
+        message:
+          type: string
+          description: Error message
+        doc_progress_count:
+          type: object
+          description: Progress count of the documents that are needed to generate
+          required:
+          - total
+          - completed
+          properties:
+            total:
+              type: number
+              description: Total count
+              example: 10
+            completed:
+              type: number
+              description: Completed count
+              example: 5
+        result:
+          type: object
+          description: Result of the email template that is replaced along with generated docs
+          properties:
+            entity:
+              $ref: '#/components/schemas/EmailTemplateEntity'
+            relations:
+              type: array
+              items:
+                type: object
+    BulkSendMessageRequest:
+      type: object
+      required:
+      - email_template_id
+      - recipient_ids
+      properties:
+        email_template_id:
+          type: string
+          description: ID of email template to use for sending bulk emails
+          example: 511ceb90-f738-47aa-8b1e-915ace0ae13c
+        recipient_ids:
+          type: array
+          description: List of entity ids to use as recipients
+          items:
+            type: string
+          example:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa7
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa8
+    BulkSendMessageJob:
+      type: object
+      required:
+      - job_id
+      - status
+      - request
+      properties:
+        job_id:
+          type: string
+          description: Job ID for tracking the status of bulk message action
+          example: 8c086140-f33e-4bb7-a993-50c0f2402c7b
+        status:
+          type: string
+          description: |
+            Status of the bulk message action
+            * QUEUEING: Bulk message action is generating emails to send in a queue
+            * SENDING: Bulk message action is sending emails from the queue
+            * SUCCESS: Bulk message action is completed successfully
+            * FAILED: Bulk message action is failed
+            * CANCELLED: Bulk message action was cancelled
+          enum:
+          - QUEUEING
+          - SENDING
+          - SUCCESS
+          - FAILED
+          - CANCELLED
+        request:
+          $ref: '#/components/schemas/BulkSendMessageRequest'
+        total_queued:
+          type: integer
+          description: Total number of emails generated and queued for sending
+          example: 100
+        sent:
+          type: array
+          description: List of entity ids and message ids that were sent successfully
+          items:
+            type: object
+            required:
+            - entity_id
+            - message_id
+            properties:
+              entity_id:
+                type: string
+                description: Recipient Entity ID
+                example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              message_id:
+                type: string
+                description: Message ID
+                example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        failed:
+          type: array
+          description: List of entity ids that were skipped or failed
+          items:
+            type: object
+            required:
+            - entity_id
+            - error
+            properties:
+              entity_id:
+                type: string
+                description: Recipient Entity ID
+                example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              error:
+                type: string
+                description: Error message
+servers:
+- url: https://email-template.sls.epilot.io
+
