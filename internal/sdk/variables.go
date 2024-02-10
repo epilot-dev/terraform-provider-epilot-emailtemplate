@@ -84,6 +84,13 @@ func (s *Variables) ReplaceVariables(ctx context.Context, request *operations.Re
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {
@@ -192,6 +199,13 @@ func (s *Variables) ReplaceVariablesAsync(ctx context.Context, request operation
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {

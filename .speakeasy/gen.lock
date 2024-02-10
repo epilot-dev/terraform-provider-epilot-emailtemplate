@@ -4,17 +4,20 @@ management:
   docChecksum: b6c7bcf9d3802609bc5f80e7f42fe4de
   docVersion: 1.0.0-RFC
   speakeasyVersion: internal
-  generationVersion: 2.230.1
-  releaseVersion: 0.2.7
-  configChecksum: e148765162fddc9ee783eb5c653e2c44
+  generationVersion: 2.252.2
+  releaseVersion: 0.3.2
+  configChecksum: 6a834dd35b06ff1932e1f7f0e8982a9d
+  repoURL: https://github.com/epilot-dev/terraform-provider-epilot-emailtemplate.git
+  repoSubDirectory: .
+  published: true
 features:
   terraform:
-    constsAndDefaults: 0.1.2
-    core: 3.8.1
-    globalSecurity: 2.81.2
+    constsAndDefaults: 0.1.3
+    core: 3.9.4
+    globalSecurity: 2.81.3
     globalServerURLs: 2.82.1
     retries: 2.81.1
-    unions: 2.81.7
+    unions: 2.81.8
 generatedFiles:
   - internal/sdk/emailtemplates.go
   - internal/sdk/variables.go

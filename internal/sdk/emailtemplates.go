@@ -85,6 +85,13 @@ func (s *EmailTemplates) BulkSendMessage(ctx context.Context, request *operation
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {
@@ -181,6 +188,13 @@ func (s *EmailTemplates) GetTemplateDetail(ctx context.Context, request operatio
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {
@@ -284,6 +298,13 @@ func (s *EmailTemplates) RevertToOriginalTemplate(ctx context.Context, request *
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {
@@ -376,6 +397,13 @@ func (s *EmailTemplates) SaveTemplate(ctx context.Context, request *shared.Email
 			"5XX",
 		},
 	}, func() (*http.Response, error) {
+		if req.Body != nil {
+			copyBody, err := req.GetBody()
+			if err != nil {
+				return nil, err
+			}
+			req.Body = copyBody
+		}
 		return client.Do(req)
 	})
 	if err != nil {
