@@ -5,12 +5,13 @@ package provider
 import (
 	"context"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"net/http"
 )
 
 var _ provider.Provider = &EpilotEmailtemplateProvider{}
@@ -24,10 +25,9 @@ type EpilotEmailtemplateProvider struct {
 
 // EpilotEmailtemplateProviderModel describes the provider data model.
 type EpilotEmailtemplateProviderModel struct {
-	ServerURL      types.String `tfsdk:"server_url"`
-	AsOrganization types.String `tfsdk:"as_organization"`
-	EpilotAuth     types.String `tfsdk:"epilot_auth"`
-	EpilotOrg      types.String `tfsdk:"epilot_org"`
+	ServerURL  types.String `tfsdk:"server_url"`
+	EpilotAuth types.String `tfsdk:"epilot_auth"`
+	EpilotOrg  types.String `tfsdk:"epilot_org"`
 }
 
 func (p *EpilotEmailtemplateProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -44,10 +44,6 @@ func (p *EpilotEmailtemplateProvider) Schema(ctx context.Context, req provider.S
 				MarkdownDescription: "Server URL (defaults to https://email-template.sls.epilot.io)",
 				Optional:            true,
 				Required:            false,
-			},
-			"as_organization": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
 			},
 			"epilot_auth": schema.StringAttribute{
 				Optional:  true,
@@ -76,12 +72,6 @@ func (p *EpilotEmailtemplateProvider) Configure(ctx context.Context, req provide
 		ServerURL = "https://email-template.sls.epilot.io"
 	}
 
-	asOrganization := new(string)
-	if !data.AsOrganization.IsUnknown() && !data.AsOrganization.IsNull() {
-		*asOrganization = data.AsOrganization.ValueString()
-	} else {
-		asOrganization = nil
-	}
 	epilotAuth := new(string)
 	if !data.EpilotAuth.IsUnknown() && !data.EpilotAuth.IsNull() {
 		*epilotAuth = data.EpilotAuth.ValueString()
@@ -95,14 +85,14 @@ func (p *EpilotEmailtemplateProvider) Configure(ctx context.Context, req provide
 		epilotOrg = nil
 	}
 	security := shared.Security{
-		AsOrganization: asOrganization,
-		EpilotAuth:     epilotAuth,
-		EpilotOrg:      epilotOrg,
+		EpilotAuth: epilotAuth,
+		EpilotOrg:  epilotOrg,
 	}
 
 	opts := []sdk.SDKOption{
 		sdk.WithServerURL(ServerURL),
 		sdk.WithSecurity(security),
+		sdk.WithClient(http.DefaultClient),
 	}
 	client := sdk.New(opts...)
 

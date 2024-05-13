@@ -4,15 +4,13 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	speakeasy_boolplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/boolplanmodifier"
 	speakeasy_listplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/listplanmodifier"
 	speakeasy_numberplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/numberplanmodifier"
 	speakeasy_stringplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/stringplanmodifier"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/operations"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -43,27 +41,26 @@ type EmailTemplateResource struct {
 
 // EmailTemplateResourceModel describes the resource data model.
 type EmailTemplateResourceModel struct {
-	CreatedAt      types.String   `tfsdk:"created_at"`
-	Org            types.String   `tfsdk:"org"`
-	Schema         types.String   `tfsdk:"schema"`
-	Title          types.String   `tfsdk:"title"`
-	UpdatedAt      types.String   `tfsdk:"updated_at"`
 	Attachments    []types.String `tfsdk:"attachments"`
 	Bcc            []types.String `tfsdk:"bcc"`
 	Body           types.String   `tfsdk:"body"`
 	BrandID        types.Number   `tfsdk:"brand_id"`
 	Cc             []types.String `tfsdk:"cc"`
-	CreatedBy      types.Number   `tfsdk:"created_by"`
+	CreatedAt      types.String   `tfsdk:"created_at"`
+	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
 	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Name           types.String   `tfsdk:"name"`
-	Relations      types.String   `tfsdk:"relations"`
+	Org            types.String   `tfsdk:"org"`
+	Schema         types.String   `tfsdk:"schema"`
 	Subject        types.String   `tfsdk:"subject"`
 	SystemTemplate types.Bool     `tfsdk:"system_template"`
 	Tags           []types.String `tfsdk:"tags"`
+	Title          types.String   `tfsdk:"title"`
 	To             []types.String `tfsdk:"to"`
-	UpdatedBy      types.Number   `tfsdk:"updated_by"`
+	UpdatedAt      types.String   `tfsdk:"updated_at"`
+	UpdatedBy      types.String   `tfsdk:"updated_by"`
 }
 
 func (r *EmailTemplateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,34 +70,7 @@ func (r *EmailTemplateResource) Metadata(ctx context.Context, req resource.Metad
 func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "EmailTemplate Resource",
-
 		Attributes: map[string]schema.Attribute{
-			"created_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Created date`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"org": schema.StringAttribute{
-				Computed:    true,
-				Description: `Ivy Organization ID the entity belongs to`,
-			},
-			"schema": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL-friendly identifier for the entity schema`,
-			},
-			"title": schema.StringAttribute{
-				Computed:    true,
-				Description: `Entity title`,
-			},
-			"updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `Updated date`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
 			"attachments": schema.ListAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.List{
@@ -158,11 +128,18 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
-			"created_by": schema.NumberAttribute{
+			"created_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `Created date`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"created_by": schema.StringAttribute{
 				Computed: true,
-				PlanModifiers: []planmodifier.Number{
-					numberplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_numberplanmodifier.SuppressDiff(speakeasy_numberplanmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Optional:    true,
 				Description: `Created by. Requires replacement if changed. `,
@@ -208,12 +185,13 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Required:    true,
 				Description: `name. Requires replacement if changed. `,
 			},
-			"relations": schema.StringAttribute{
+			"org": schema.StringAttribute{
 				Computed:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
+				Description: `Ivy Organization ID the entity belongs to`,
+			},
+			"schema": schema.StringAttribute{
+				Computed:    true,
+				Description: `URL-friendly identifier for the entity schema`,
 			},
 			"subject": schema.StringAttribute{
 				PlanModifiers: []planmodifier.String{
@@ -245,6 +223,10 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				ElementType: types.StringType,
 				Description: `Entity tags. Requires replacement if changed. `,
 			},
+			"title": schema.StringAttribute{
+				Computed:    true,
+				Description: `Entity title`,
+			},
 			"to": schema.ListAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.List{
@@ -258,11 +240,18 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
-			"updated_by": schema.NumberAttribute{
+			"updated_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `Updated date`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"updated_by": schema.StringAttribute{
 				Computed: true,
-				PlanModifiers: []planmodifier.Number{
-					numberplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_numberplanmodifier.SuppressDiff(speakeasy_numberplanmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Optional:    true,
 				Description: `Updated by. Requires replacement if changed. `,
@@ -309,98 +298,7 @@ func (r *EmailTemplateResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	var request *shared.EmailTemplateRequest
-	id := new(string)
-	if !data.ID.IsUnknown() && !data.ID.IsNull() {
-		*id = data.ID.ValueString()
-	} else {
-		id = nil
-	}
-	var tags []string = nil
-	for _, tagsItem := range data.Tags {
-		tags = append(tags, tagsItem.ValueString())
-	}
-	var attachments []interface{} = nil
-	for _, attachmentsItem := range data.Attachments {
-		var attachmentsTmp interface{}
-		_ = json.Unmarshal([]byte(attachmentsItem.ValueString()), &attachmentsTmp)
-		attachments = append(attachments, attachmentsTmp)
-	}
-	var bcc []interface{} = nil
-	for _, bccItem := range data.Bcc {
-		var bccTmp interface{}
-		_ = json.Unmarshal([]byte(bccItem.ValueString()), &bccTmp)
-		bcc = append(bcc, bccTmp)
-	}
-	body := new(string)
-	if !data.Body.IsUnknown() && !data.Body.IsNull() {
-		*body = data.Body.ValueString()
-	} else {
-		body = nil
-	}
-	brandID := new(float64)
-	if !data.BrandID.IsUnknown() && !data.BrandID.IsNull() {
-		*brandID, _ = data.BrandID.ValueBigFloat().Float64()
-	} else {
-		brandID = nil
-	}
-	var cc []interface{} = nil
-	for _, ccItem := range data.Cc {
-		var ccTmp interface{}
-		_ = json.Unmarshal([]byte(ccItem.ValueString()), &ccTmp)
-		cc = append(cc, ccTmp)
-	}
-	createdBy := new(float64)
-	if !data.CreatedBy.IsUnknown() && !data.CreatedBy.IsNull() {
-		*createdBy, _ = data.CreatedBy.ValueBigFloat().Float64()
-	} else {
-		createdBy = nil
-	}
-	var file interface{}
-	if !data.File.IsUnknown() && !data.File.IsNull() {
-		_ = json.Unmarshal([]byte(data.File.ValueString()), &file)
-	}
-	var from interface{}
-	if !data.From.IsUnknown() && !data.From.IsNull() {
-		_ = json.Unmarshal([]byte(data.From.ValueString()), &from)
-	}
-	name := data.Name.ValueString()
-	subject := data.Subject.ValueString()
-	systemTemplate := new(bool)
-	if !data.SystemTemplate.IsUnknown() && !data.SystemTemplate.IsNull() {
-		*systemTemplate = data.SystemTemplate.ValueBool()
-	} else {
-		systemTemplate = nil
-	}
-	var to []interface{} = nil
-	for _, toItem := range data.To {
-		var toTmp interface{}
-		_ = json.Unmarshal([]byte(toItem.ValueString()), &toTmp)
-		to = append(to, toTmp)
-	}
-	updatedBy := new(float64)
-	if !data.UpdatedBy.IsUnknown() && !data.UpdatedBy.IsNull() {
-		*updatedBy, _ = data.UpdatedBy.ValueBigFloat().Float64()
-	} else {
-		updatedBy = nil
-	}
-	request = &shared.EmailTemplateRequest{
-		ID:             id,
-		Tags:           tags,
-		Attachments:    attachments,
-		Bcc:            bcc,
-		Body:           body,
-		BrandID:        brandID,
-		Cc:             cc,
-		CreatedBy:      createdBy,
-		File:           file,
-		From:           from,
-		Name:           name,
-		Subject:        subject,
-		SystemTemplate: systemTemplate,
-		To:             to,
-		UpdatedBy:      updatedBy,
-	}
+	request := data.ToSharedEmailTemplateRequest()
 	res, err := r.client.EmailTemplates.SaveTemplate(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -460,6 +358,10 @@ func (r *EmailTemplateResource) Read(ctx context.Context, req resource.ReadReque
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
 		return
 	}
 	if res.StatusCode != 200 {

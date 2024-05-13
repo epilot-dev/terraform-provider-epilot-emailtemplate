@@ -4,7 +4,7 @@ package operations
 
 import (
 	"errors"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/utils"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/utils"
 )
 
 var ErrUnsupportedOption = errors.New("unsupported option")

@@ -14,12 +14,12 @@ EmailTemplate Resource
 
 ```terraform
 resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
+  id              = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
   body            = "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly"
   brand_id        = 0
   created_by      = 1234
   file            = "{ \"see\": \"documentation\" }"
   from            = "{ \"see\": \"documentation\" }"
-  id              = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
   name            = "Order confirmation"
   subject         = "We have received your order!"
   system_template = false
@@ -42,7 +42,7 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `body` (String) Body. Requires replacement if changed.
 - `brand_id` (Number) Brand ID. Equal 0 if available for All brands. Requires replacement if changed.
 - `cc` (List of String) Cc. Requires replacement if changed.
-- `created_by` (Number) Created by. Requires replacement if changed.
+- `created_by` (String) Created by. Requires replacement if changed.
 - `file` (String) Parsed as JSON.
 - `from` (String) Parsed as JSON.
 - `id` (String) Requires replacement if changed.
@@ -52,13 +52,12 @@ Remember to add default content of template to [system-template.ts](https://gitl
 Requires replacement if changed.
 - `tags` (List of String) Entity tags. Requires replacement if changed.
 - `to` (List of String) To. Requires replacement if changed.
-- `updated_by` (Number) Updated by. Requires replacement if changed.
+- `updated_by` (String) Updated by. Requires replacement if changed.
 
 ### Read-Only
 
 - `created_at` (String) Created date
 - `org` (String) Ivy Organization ID the entity belongs to
-- `relations` (String) Parsed as JSON.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title
 - `updated_at` (String) Updated date

@@ -91,3 +91,21 @@ actions:
         items: {}
       bcc:
         items: {}
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["org_id"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["created_by"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["created_at"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["updated_at"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["approved_at"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["approved_action"]["readonly"]
+    remove: true
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["task_token"]["readonly"]
+    remove: true
+  - target: $["security"]["AsOrganization"]
+    remove: true
+  - target: $["components"]["schemas"]["EmailTemplateResponse"]["properties"]["relations"]
+    remove: true

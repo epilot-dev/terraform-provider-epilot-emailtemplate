@@ -1,3 +1,3 @@
 data "epilot-emailtemplate_email_template" "my_emailtemplate" {
-  id = "fa690eaa-b60f-46f7-8b65-6cbbd15a6180"
+  id = "81fa690e-aab6-40f6-b70b-656cbbd15a61"
 }

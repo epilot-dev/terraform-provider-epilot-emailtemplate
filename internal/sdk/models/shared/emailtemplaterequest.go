@@ -17,7 +17,7 @@ type EmailTemplateRequest struct {
 	// Cc
 	Cc []interface{} `json:"cc,omitempty"`
 	// Created by
-	CreatedBy *float64    `json:"created_by,omitempty"`
+	CreatedBy *string     `json:"created_by,omitempty"`
 	File      interface{} `json:"file,omitempty"`
 	From      interface{} `json:"from,omitempty"`
 	// name
@@ -31,7 +31,7 @@ type EmailTemplateRequest struct {
 	// To
 	To []interface{} `json:"to,omitempty"`
 	// Updated by
-	UpdatedBy *float64 `json:"updated_by,omitempty"`
+	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
 func (o *EmailTemplateRequest) GetID() *string {
@@ -83,7 +83,7 @@ func (o *EmailTemplateRequest) GetCc() []interface{} {
 	return o.Cc
 }
 
-func (o *EmailTemplateRequest) GetCreatedBy() *float64 {
+func (o *EmailTemplateRequest) GetCreatedBy() *string {
 	if o == nil {
 		return nil
 	}
@@ -132,7 +132,7 @@ func (o *EmailTemplateRequest) GetTo() []interface{} {
 	return o.To
 }
 
-func (o *EmailTemplateRequest) GetUpdatedBy() *float64 {
+func (o *EmailTemplateRequest) GetUpdatedBy() *string {
 	if o == nil {
 		return nil
 	}

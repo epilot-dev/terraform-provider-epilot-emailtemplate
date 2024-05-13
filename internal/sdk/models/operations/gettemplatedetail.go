@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
 	"net/http"
 )
 

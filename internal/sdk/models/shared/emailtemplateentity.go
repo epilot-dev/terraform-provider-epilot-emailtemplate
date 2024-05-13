@@ -3,7 +3,7 @@
 package shared
 
 import (
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/utils"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/utils"
 	"time"
 )
 
@@ -33,7 +33,7 @@ type EmailTemplateEntity struct {
 	// Cc
 	Cc []interface{} `json:"cc,omitempty"`
 	// Created by
-	CreatedBy *float64    `json:"created_by,omitempty"`
+	CreatedBy *string     `json:"created_by,omitempty"`
 	File      interface{} `json:"file,omitempty"`
 	From      interface{} `json:"from,omitempty"`
 	// name
@@ -47,7 +47,7 @@ type EmailTemplateEntity struct {
 	// To
 	To []interface{} `json:"to,omitempty"`
 	// Updated by
-	UpdatedBy *float64 `json:"updated_by,omitempty"`
+	UpdatedBy *string `json:"updated_by,omitempty"`
 }
 
 func (e EmailTemplateEntity) MarshalJSON() ([]byte, error) {
@@ -145,7 +145,7 @@ func (o *EmailTemplateEntity) GetCc() []interface{} {
 	return o.Cc
 }
 
-func (o *EmailTemplateEntity) GetCreatedBy() *float64 {
+func (o *EmailTemplateEntity) GetCreatedBy() *string {
 	if o == nil {
 		return nil
 	}
@@ -194,7 +194,7 @@ func (o *EmailTemplateEntity) GetTo() []interface{} {
 	return o.To
 }
 
-func (o *EmailTemplateEntity) GetUpdatedBy() *float64 {
+func (o *EmailTemplateEntity) GetUpdatedBy() *string {
 	if o == nil {
 		return nil
 	}

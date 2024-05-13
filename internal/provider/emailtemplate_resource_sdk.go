@@ -4,80 +4,169 @@ package provider
 
 import (
 	"encoding/json"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/shared"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"math/big"
 	"time"
 )
 
+func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.EmailTemplateRequest {
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
+	var tags []string = []string{}
+	for _, tagsItem := range r.Tags {
+		tags = append(tags, tagsItem.ValueString())
+	}
+	var attachments []interface{} = []interface{}{}
+	for _, attachmentsItem := range r.Attachments {
+		var attachmentsTmp interface{}
+		_ = json.Unmarshal([]byte(attachmentsItem.ValueString()), &attachmentsTmp)
+		attachments = append(attachments, attachmentsTmp)
+	}
+	var bcc []interface{} = []interface{}{}
+	for _, bccItem := range r.Bcc {
+		var bccTmp interface{}
+		_ = json.Unmarshal([]byte(bccItem.ValueString()), &bccTmp)
+		bcc = append(bcc, bccTmp)
+	}
+	body := new(string)
+	if !r.Body.IsUnknown() && !r.Body.IsNull() {
+		*body = r.Body.ValueString()
+	} else {
+		body = nil
+	}
+	brandID := new(float64)
+	if !r.BrandID.IsUnknown() && !r.BrandID.IsNull() {
+		*brandID, _ = r.BrandID.ValueBigFloat().Float64()
+	} else {
+		brandID = nil
+	}
+	var cc []interface{} = []interface{}{}
+	for _, ccItem := range r.Cc {
+		var ccTmp interface{}
+		_ = json.Unmarshal([]byte(ccItem.ValueString()), &ccTmp)
+		cc = append(cc, ccTmp)
+	}
+	createdBy := new(string)
+	if !r.CreatedBy.IsUnknown() && !r.CreatedBy.IsNull() {
+		*createdBy = r.CreatedBy.ValueString()
+	} else {
+		createdBy = nil
+	}
+	var file interface{}
+	if !r.File.IsUnknown() && !r.File.IsNull() {
+		_ = json.Unmarshal([]byte(r.File.ValueString()), &file)
+	}
+	var from interface{}
+	if !r.From.IsUnknown() && !r.From.IsNull() {
+		_ = json.Unmarshal([]byte(r.From.ValueString()), &from)
+	}
+	name := r.Name.ValueString()
+	subject := r.Subject.ValueString()
+	systemTemplate := new(bool)
+	if !r.SystemTemplate.IsUnknown() && !r.SystemTemplate.IsNull() {
+		*systemTemplate = r.SystemTemplate.ValueBool()
+	} else {
+		systemTemplate = nil
+	}
+	var to []interface{} = []interface{}{}
+	for _, toItem := range r.To {
+		var toTmp interface{}
+		_ = json.Unmarshal([]byte(toItem.ValueString()), &toTmp)
+		to = append(to, toTmp)
+	}
+	updatedBy := new(string)
+	if !r.UpdatedBy.IsUnknown() && !r.UpdatedBy.IsNull() {
+		*updatedBy = r.UpdatedBy.ValueString()
+	} else {
+		updatedBy = nil
+	}
+	out := shared.EmailTemplateRequest{
+		ID:             id,
+		Tags:           tags,
+		Attachments:    attachments,
+		Bcc:            bcc,
+		Body:           body,
+		BrandID:        brandID,
+		Cc:             cc,
+		CreatedBy:      createdBy,
+		File:           file,
+		From:           from,
+		Name:           name,
+		Subject:        subject,
+		SystemTemplate: systemTemplate,
+		To:             to,
+		UpdatedBy:      updatedBy,
+	}
+	return &out
+}
+
 func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *shared.EmailTemplateEntity) {
-	r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
-	r.Org = types.StringValue(resp.Org)
-	r.Schema = types.StringValue(resp.Schema)
-	r.Title = types.StringValue(resp.Title)
-	r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
-	r.Attachments = nil
-	for _, attachmentsItem := range resp.Attachments {
-		var attachments1 types.String
-		attachments1Result, _ := json.Marshal(attachmentsItem)
-		attachments1 = types.StringValue(string(attachments1Result))
-		r.Attachments = append(r.Attachments, attachments1)
-	}
-	r.Bcc = nil
-	for _, bccItem := range resp.Bcc {
-		var bcc1 types.String
-		bcc1Result, _ := json.Marshal(bccItem)
-		bcc1 = types.StringValue(string(bcc1Result))
-		r.Bcc = append(r.Bcc, bcc1)
-	}
-	r.Body = types.StringPointerValue(resp.Body)
-	if resp.BrandID != nil {
-		r.BrandID = types.NumberValue(big.NewFloat(float64(*resp.BrandID)))
-	} else {
-		r.BrandID = types.NumberNull()
-	}
-	r.Cc = nil
-	for _, ccItem := range resp.Cc {
-		var cc1 types.String
-		cc1Result, _ := json.Marshal(ccItem)
-		cc1 = types.StringValue(string(cc1Result))
-		r.Cc = append(r.Cc, cc1)
-	}
-	if resp.CreatedBy != nil {
-		r.CreatedBy = types.NumberValue(big.NewFloat(float64(*resp.CreatedBy)))
-	} else {
-		r.CreatedBy = types.NumberNull()
-	}
-	if resp.File == nil {
-		r.File = types.StringNull()
-	} else {
-		fileResult, _ := json.Marshal(resp.File)
-		r.File = types.StringValue(string(fileResult))
-	}
-	if resp.From == nil {
-		r.From = types.StringNull()
-	} else {
-		fromResult, _ := json.Marshal(resp.From)
-		r.From = types.StringValue(string(fromResult))
-	}
-	r.ID = types.StringValue(resp.ID)
-	r.Name = types.StringValue(resp.Name)
-	r.Subject = types.StringPointerValue(resp.Subject)
-	r.SystemTemplate = types.BoolPointerValue(resp.SystemTemplate)
-	r.Tags = nil
-	for _, v := range resp.Tags {
-		r.Tags = append(r.Tags, types.StringValue(v))
-	}
-	r.To = nil
-	for _, toItem := range resp.To {
-		var to1 types.String
-		to1Result, _ := json.Marshal(toItem)
-		to1 = types.StringValue(string(to1Result))
-		r.To = append(r.To, to1)
-	}
-	if resp.UpdatedBy != nil {
-		r.UpdatedBy = types.NumberValue(big.NewFloat(float64(*resp.UpdatedBy)))
-	} else {
-		r.UpdatedBy = types.NumberNull()
+	if resp != nil {
+		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
+		r.ID = types.StringValue(resp.ID)
+		r.Org = types.StringValue(resp.Org)
+		r.Schema = types.StringValue(resp.Schema)
+		r.Tags = []types.String{}
+		for _, v := range resp.Tags {
+			r.Tags = append(r.Tags, types.StringValue(v))
+		}
+		r.Title = types.StringValue(resp.Title)
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
+		r.Attachments = nil
+		for _, attachmentsItem := range resp.Attachments {
+			var attachments1 types.String
+			attachments1Result, _ := json.Marshal(attachmentsItem)
+			attachments1 = types.StringValue(string(attachments1Result))
+			r.Attachments = append(r.Attachments, attachments1)
+		}
+		r.Bcc = nil
+		for _, bccItem := range resp.Bcc {
+			var bcc1 types.String
+			bcc1Result, _ := json.Marshal(bccItem)
+			bcc1 = types.StringValue(string(bcc1Result))
+			r.Bcc = append(r.Bcc, bcc1)
+		}
+		r.Body = types.StringPointerValue(resp.Body)
+		if resp.BrandID != nil {
+			r.BrandID = types.NumberValue(big.NewFloat(float64(*resp.BrandID)))
+		} else {
+			r.BrandID = types.NumberNull()
+		}
+		r.Cc = nil
+		for _, ccItem := range resp.Cc {
+			var cc1 types.String
+			cc1Result, _ := json.Marshal(ccItem)
+			cc1 = types.StringValue(string(cc1Result))
+			r.Cc = append(r.Cc, cc1)
+		}
+		r.CreatedBy = types.StringPointerValue(resp.CreatedBy)
+		if resp.File == nil {
+			r.File = types.StringNull()
+		} else {
+			fileResult, _ := json.Marshal(resp.File)
+			r.File = types.StringValue(string(fileResult))
+		}
+		if resp.From == nil {
+			r.From = types.StringNull()
+		} else {
+			fromResult, _ := json.Marshal(resp.From)
+			r.From = types.StringValue(string(fromResult))
+		}
+		r.Name = types.StringValue(resp.Name)
+		r.Subject = types.StringPointerValue(resp.Subject)
+		r.SystemTemplate = types.BoolPointerValue(resp.SystemTemplate)
+		r.To = nil
+		for _, toItem := range resp.To {
+			var to1 types.String
+			to1Result, _ := json.Marshal(toItem)
+			to1 = types.StringValue(string(to1Result))
+			r.To = append(r.To, to1)
+		}
+		r.UpdatedBy = types.StringPointerValue(resp.UpdatedBy)
 	}
 }

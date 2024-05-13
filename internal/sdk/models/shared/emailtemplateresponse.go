@@ -3,8 +3,7 @@
 package shared
 
 type EmailTemplateResponse struct {
-	Entity    *EmailTemplateEntity `json:"entity,omitempty"`
-	Relations interface{}          `json:"relations,omitempty"`
+	Entity *EmailTemplateEntity `json:"entity,omitempty"`
 }
 
 func (o *EmailTemplateResponse) GetEntity() *EmailTemplateEntity {
@@ -12,11 +11,4 @@ func (o *EmailTemplateResponse) GetEntity() *EmailTemplateEntity {
 		return nil
 	}
 	return o.Entity
-}
-
-func (o *EmailTemplateResponse) GetRelations() interface{} {
-	if o == nil {
-		return nil
-	}
-	return o.Relations
 }

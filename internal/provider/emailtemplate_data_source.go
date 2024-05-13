@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/pkg/models/operations"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,13 +34,12 @@ type EmailTemplateDataSourceModel struct {
 	BrandID        types.Number   `tfsdk:"brand_id"`
 	Cc             []types.String `tfsdk:"cc"`
 	CreatedAt      types.String   `tfsdk:"created_at"`
-	CreatedBy      types.Number   `tfsdk:"created_by"`
+	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
 	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Name           types.String   `tfsdk:"name"`
 	Org            types.String   `tfsdk:"org"`
-	Relations      types.String   `tfsdk:"relations"`
 	Schema         types.String   `tfsdk:"schema"`
 	Subject        types.String   `tfsdk:"subject"`
 	SystemTemplate types.Bool     `tfsdk:"system_template"`
@@ -48,7 +47,7 @@ type EmailTemplateDataSourceModel struct {
 	Title          types.String   `tfsdk:"title"`
 	To             []types.String `tfsdk:"to"`
 	UpdatedAt      types.String   `tfsdk:"updated_at"`
-	UpdatedBy      types.Number   `tfsdk:"updated_by"`
+	UpdatedBy      types.String   `tfsdk:"updated_by"`
 }
 
 // Metadata returns the data source type name.
@@ -89,7 +88,7 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:    true,
 				Description: `Created date`,
 			},
-			"created_by": schema.NumberAttribute{
+			"created_by": schema.StringAttribute{
 				Computed:    true,
 				Description: `Created by`,
 			},
@@ -112,10 +111,6 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 			"org": schema.StringAttribute{
 				Computed:    true,
 				Description: `Ivy Organization ID the entity belongs to`,
-			},
-			"relations": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
@@ -149,7 +144,7 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:    true,
 				Description: `Updated date`,
 			},
-			"updated_by": schema.NumberAttribute{
+			"updated_by": schema.StringAttribute{
 				Computed:    true,
 				Description: `Updated by`,
 			},
@@ -209,6 +204,10 @@ func (r *EmailTemplateDataSource) Read(ctx context.Context, req datasource.ReadR
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
 		return
 	}
 	if res.StatusCode != 200 {

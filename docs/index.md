@@ -17,7 +17,7 @@ terraform {
   required_providers {
     epilot-emailtemplate = {
       source  = "epilot-dev/epilot-emailtemplate"
-      version = "0.2.7"
+      version = "0.3.2"
     }
   }
 }
@@ -32,7 +32,6 @@ provider "epilot-emailtemplate" {
 
 ### Optional
 
-- `as_organization` (String, Sensitive)
 - `epilot_auth` (String, Sensitive)
 - `epilot_org` (String, Sensitive)
 - `server_url` (String) Server URL (defaults to https://email-template.sls.epilot.io)

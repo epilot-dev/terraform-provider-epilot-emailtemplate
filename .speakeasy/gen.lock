@@ -1,24 +1,62 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: b6c7bcf9d3802609bc5f80e7f42fe4de
+  docChecksum: 44717d9335c13319191b6ccbff84266f
   docVersion: 1.0.0-RFC
-  speakeasyVersion: internal
-  generationVersion: 2.230.1
-  releaseVersion: 0.2.7
-  configChecksum: e148765162fddc9ee783eb5c653e2c44
+  speakeasyVersion: 1.278.0
+  generationVersion: 2.322.4
+  releaseVersion: 0.3.2
+  configChecksum: 2489b92f0daf0f33fb6690c4719cbe5b
 features:
   terraform:
-    constsAndDefaults: 0.1.2
-    core: 3.8.1
-    globalSecurity: 2.81.2
+    constsAndDefaults: 0.1.4
+    core: 3.19.0
+    deprecations: 2.81.1
+    globalSecurity: 2.81.6
     globalServerURLs: 2.82.1
     retries: 2.81.1
-    unions: 2.81.7
+    unions: 2.81.12
 generatedFiles:
   - internal/sdk/emailtemplates.go
   - internal/sdk/variables.go
   - internal/sdk/sdk.go
+  - internal/sdk/models/errors/sdkerror.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/decimal.go
+  - internal/sdk/types/pointers.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/models/operations/bulksendmessage.go
+  - internal/sdk/models/operations/gettemplatedetail.go
+  - internal/sdk/models/operations/reverttooriginaltemplate.go
+  - internal/sdk/models/operations/savetemplate.go
+  - internal/sdk/models/operations/replacevariables.go
+  - internal/sdk/models/operations/replacevariablesasync.go
+  - internal/sdk/models/shared/bulksendmessagejob.go
+  - internal/sdk/models/shared/bulksendmessagerequest.go
+  - internal/sdk/models/shared/bulksendmessagerequestwithquery.go
+  - internal/sdk/models/shared/emailtemplateresponse.go
+  - internal/sdk/models/shared/emailtemplateentity.go
+  - internal/sdk/models/shared/emailtemplaterequest.go
+  - internal/sdk/models/shared/variableparameters.go
+  - internal/sdk/models/shared/templatetype.go
+  - internal/sdk/models/shared/asyncemailtemplateresponse.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/.gitignore
+  - internal/sdk/models/operations/options.go
+  - internal/sdk/.gitattributes
+  - internal/sdk/internal/hooks/registration.go
+  - internal/sdk/internal/hooks/hooks.go
   - examples/README.md
   - go.mod
   - go.sum
@@ -47,22 +85,6 @@ generatedFiles:
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
   - internal/provider/utils.go
-  - internal/sdk/pkg/models/sdkerrors/sdkerror.go
-  - internal/sdk/pkg/types/bigint.go
-  - internal/sdk/pkg/types/date.go
-  - internal/sdk/pkg/types/datetime.go
-  - internal/sdk/pkg/types/decimal.go
-  - internal/sdk/pkg/types/pointers.go
-  - internal/sdk/pkg/utils/contenttype.go
-  - internal/sdk/pkg/utils/form.go
-  - internal/sdk/pkg/utils/headers.go
-  - internal/sdk/pkg/utils/json.go
-  - internal/sdk/pkg/utils/pathparams.go
-  - internal/sdk/pkg/utils/queryparams.go
-  - internal/sdk/pkg/utils/requestbody.go
-  - internal/sdk/pkg/utils/retries.go
-  - internal/sdk/pkg/utils/security.go
-  - internal/sdk/pkg/utils/utils.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
   - internal/validators/JSONParseValidator.go
@@ -79,29 +101,14 @@ generatedFiles:
   - main.go
   - terraform-registry-manifest.json
   - tools/tools.go
-  - internal/sdk/pkg/models/operations/bulksendmessage.go
-  - internal/sdk/pkg/models/operations/gettemplatedetail.go
-  - internal/sdk/pkg/models/operations/reverttooriginaltemplate.go
-  - internal/sdk/pkg/models/operations/savetemplate.go
-  - internal/sdk/pkg/models/operations/replacevariables.go
-  - internal/sdk/pkg/models/operations/replacevariablesasync.go
-  - internal/sdk/pkg/models/shared/bulksendmessagejob.go
-  - internal/sdk/pkg/models/shared/bulksendmessagerequest.go
-  - internal/sdk/pkg/models/shared/emailtemplateresponse.go
-  - internal/sdk/pkg/models/shared/emailtemplateentity.go
-  - internal/sdk/pkg/models/shared/emailtemplaterequest.go
-  - internal/sdk/pkg/models/shared/variableparameters.go
-  - internal/sdk/pkg/models/shared/templatetype.go
-  - internal/sdk/pkg/models/shared/asyncemailtemplateresponse.go
-  - internal/sdk/pkg/models/shared/security.go
   - USAGE.md
   - internal/provider/provider.go
   - examples/provider/provider.tf
+  - examples/resources/epilot_emailtemplate_email_template/import.sh
   - internal/provider/emailtemplate_resource.go
   - internal/provider/emailtemplate_resource_sdk.go
   - examples/resources/epilot-emailtemplate_email_template/resource.tf
   - internal/provider/emailtemplate_data_source.go
   - internal/provider/emailtemplate_data_source_sdk.go
   - examples/data-sources/epilot-emailtemplate_email_template/data-source.tf
-  - internal/sdk/pkg/models/operations/options.go
   - .gitattributes
