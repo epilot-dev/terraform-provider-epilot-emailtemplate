@@ -21,9 +21,6 @@ actions:
   - target: $["paths"]["/v1/email-template/templates/{id}"]["get"]
     update:
       x-speakeasy-entity-operation: EmailTemplate#get
-  - target: $["paths"]["/v1/email-template/templates/{id}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-match: id
   - target: $["components"]["schemas"]["EmailTemplateEntity"]
     update:
       x-speakeasy-entity: EmailTemplate
@@ -109,3 +106,8 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateResponse"]["properties"]["relations"]
     remove: true
+  - target: $["components"]["schemas"]["BaseEntity"]["properties"]
+    update:
+      _purpose: {}
+
+

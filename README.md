@@ -59,7 +59,7 @@ terraform {
   required_providers {
     epilot-emailtemplate = {
       source  = "epilot-dev/epilot-emailtemplate"
-      version = "0.3.2"
+      version = "0.4.0"
     }
   }
 }
@@ -90,12 +90,6 @@ TF_REATTACH_PROVIDERS=... terraform init
 TF_REATTACH_PROVIDERS=... terraform apply
 ```
 <!-- End SDK Example Usage [usage] -->
-
-<!-- Start Available Resources and Operations [operations] -->
-## Available Resources and Operations
-
-
-<!-- End Available Resources and Operations [operations] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 

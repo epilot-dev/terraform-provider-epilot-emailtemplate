@@ -58,8 +58,15 @@ Requires replacement if changed.
 
 - `created_at` (String) Created date
 - `org` (String) Ivy Organization ID the entity belongs to
+- `purpose` (String) Parsed as JSON.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title
 - `updated_at` (String) Updated date
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform import epilot-emailtemplate_email_template.my_epilot-emailtemplate_email_template ""
+```

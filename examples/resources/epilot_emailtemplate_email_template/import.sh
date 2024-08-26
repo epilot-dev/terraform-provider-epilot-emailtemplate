@@ -1,1 +1,0 @@
-terraform import epilot_emailtemplate_email_template.my_epilot_emailtemplate_email_template ""

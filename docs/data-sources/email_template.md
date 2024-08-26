@@ -14,7 +14,7 @@ EmailTemplate DataSource
 
 ```terraform
 data "epilot-emailtemplate_email_template" "my_emailtemplate" {
-  id = "81fa690e-aab6-40f6-b70b-656cbbd15a61"
+  id = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
 }
 ```
 
@@ -38,6 +38,7 @@ data "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `from` (String) Parsed as JSON.
 - `name` (String) name
 - `org` (String) Ivy Organization ID the entity belongs to
+- `purpose` (String) Parsed as JSON.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `subject` (String) Subject
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
@@ -47,5 +48,3 @@ Remember to add default content of template to system_template enum for revert t
 - `to` (List of String) To
 - `updated_at` (String) Updated date
 - `updated_by` (String) Updated by
-
-

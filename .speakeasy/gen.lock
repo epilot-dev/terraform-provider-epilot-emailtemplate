@@ -1,26 +1,30 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: 44717d9335c13319191b6ccbff84266f
+  docChecksum: 0f2b80a8188b0ec139aedc1758626d3b
   docVersion: 1.0.0-RFC
-  speakeasyVersion: 1.278.0
-  generationVersion: 2.322.4
-  releaseVersion: 0.3.2
-  configChecksum: 2489b92f0daf0f33fb6690c4719cbe5b
+  speakeasyVersion: 1.379.0
+  generationVersion: 2.404.3
+  releaseVersion: 0.4.0
+  configChecksum: e55ce6a8ceaf2e09c470a3a9b17a9a5e
 features:
   terraform:
+    additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.4
-    core: 3.19.0
+    core: 3.24.7
     deprecations: 2.81.1
-    globalSecurity: 2.81.6
+    envVarSecurityUsage: 0.1.0
+    globalSecurity: 2.81.8
     globalServerURLs: 2.82.1
+    nullables: 0.0.0
     retries: 2.81.1
-    unions: 2.81.12
+    unions: 2.81.16
 generatedFiles:
   - internal/sdk/emailtemplates.go
   - internal/sdk/variables.go
   - internal/sdk/sdk.go
   - internal/sdk/models/errors/sdkerror.go
+  - internal/sdk/retry/config.go
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go
@@ -55,7 +59,6 @@ generatedFiles:
   - internal/sdk/.gitignore
   - internal/sdk/models/operations/options.go
   - internal/sdk/.gitattributes
-  - internal/sdk/internal/hooks/registration.go
   - internal/sdk/internal/hooks/hooks.go
   - examples/README.md
   - go.mod
@@ -104,7 +107,7 @@ generatedFiles:
   - USAGE.md
   - internal/provider/provider.go
   - examples/provider/provider.tf
-  - examples/resources/epilot_emailtemplate_email_template/import.sh
+  - examples/resources/epilot-emailtemplate_email_template/import.sh
   - internal/provider/emailtemplate_resource.go
   - internal/provider/emailtemplate_resource_sdk.go
   - examples/resources/epilot-emailtemplate_email_template/resource.tf
@@ -112,3 +115,4 @@ generatedFiles:
   - internal/provider/emailtemplate_data_source_sdk.go
   - examples/data-sources/epilot-emailtemplate_email_template/data-source.tf
   - .gitattributes
+  - CONTRIBUTING.md

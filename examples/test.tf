@@ -1,5 +1,9 @@
-resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
+# import {
+#     to = epilot-emailtemplate_email_template.my_emailtemplate
+#     id= "6b1e3400-161f-4e24-9104-678ba492ace8"
+# }
 
+resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 }
 
 
@@ -16,6 +20,7 @@ provider "epilot-emailtemplate" {
   # Configuration options
 
   epilot_auth= var.epilot_auth
+  server_url = "https://email-template.dev.sls.epilot.io"
 }
 
 variable "epilot_auth" {
