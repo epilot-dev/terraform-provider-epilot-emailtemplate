@@ -53,7 +53,7 @@ type EmailTemplateResourceModel struct {
 	ID             types.String   `tfsdk:"id"`
 	Name           types.String   `tfsdk:"name"`
 	Org            types.String   `tfsdk:"org"`
-	Purpose        types.String   `tfsdk:"purpose"`
+	Purpose        []types.String `tfsdk:"purpose"`
 	Schema         types.String   `tfsdk:"schema"`
 	Subject        types.String   `tfsdk:"subject"`
 	SystemTemplate types.Bool     `tfsdk:"system_template"`
@@ -190,12 +190,15 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Computed:    true,
 				Description: `Ivy Organization ID the entity belongs to`,
 			},
-			"purpose": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
+			"purpose": schema.ListAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.List{
+					listplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Entity purposes. Requires replacement if changed. `,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,

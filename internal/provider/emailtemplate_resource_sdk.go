@@ -17,6 +17,10 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	} else {
 		id = nil
 	}
+	var purpose []string = []string{}
+	for _, purposeItem := range r.Purpose {
+		purpose = append(purpose, purposeItem.ValueString())
+	}
 	var tags []string = []string{}
 	for _, tagsItem := range r.Tags {
 		tags = append(tags, tagsItem.ValueString())
@@ -91,6 +95,7 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	}
 	out := shared.EmailTemplateRequest{
 		ID:             id,
+		Purpose:        purpose,
 		Tags:           tags,
 		Attachments:    attachments,
 		Bcc:            bcc,
@@ -114,11 +119,9 @@ func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
 		r.ID = types.StringValue(resp.ID)
 		r.Org = types.StringValue(resp.Org)
-		if resp.Purpose == nil {
-			r.Purpose = types.StringNull()
-		} else {
-			purposeResult, _ := json.Marshal(resp.Purpose)
-			r.Purpose = types.StringValue(string(purposeResult))
+		r.Purpose = []types.String{}
+		for _, v := range resp.Purpose {
+			r.Purpose = append(r.Purpose, types.StringValue(v))
 		}
 		r.Schema = types.StringValue(resp.Schema)
 		r.Tags = []types.String{}

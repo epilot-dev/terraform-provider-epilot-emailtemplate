@@ -46,6 +46,7 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `file` (String) Parsed as JSON.
 - `from` (String) Parsed as JSON.
 - `id` (String) Requires replacement if changed.
+- `purpose` (List of String) Entity purposes. Requires replacement if changed.
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
 Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature
 
@@ -58,7 +59,6 @@ Requires replacement if changed.
 
 - `created_at` (String) Created date
 - `org` (String) Ivy Organization ID the entity belongs to
-- `purpose` (String) Parsed as JSON.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title
 - `updated_at` (String) Updated date

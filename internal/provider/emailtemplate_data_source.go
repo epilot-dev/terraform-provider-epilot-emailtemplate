@@ -40,7 +40,7 @@ type EmailTemplateDataSourceModel struct {
 	ID             types.String   `tfsdk:"id"`
 	Name           types.String   `tfsdk:"name"`
 	Org            types.String   `tfsdk:"org"`
-	Purpose        types.String   `tfsdk:"purpose"`
+	Purpose        []types.String `tfsdk:"purpose"`
 	Schema         types.String   `tfsdk:"schema"`
 	Subject        types.String   `tfsdk:"subject"`
 	SystemTemplate types.Bool     `tfsdk:"system_template"`
@@ -113,9 +113,10 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:    true,
 				Description: `Ivy Organization ID the entity belongs to`,
 			},
-			"purpose": schema.StringAttribute{
+			"purpose": schema.ListAttribute{
 				Computed:    true,
-				Description: `Parsed as JSON.`,
+				ElementType: types.StringType,
+				Description: `Entity purposes`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,

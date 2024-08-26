@@ -4,6 +4,8 @@ package shared
 
 type EmailTemplateRequest struct {
 	ID *string `json:"_id,omitempty"`
+	// Entity purposes
+	Purpose []string `json:"_purpose,omitempty"`
 	// Entity tags
 	Tags []string `json:"_tags,omitempty"`
 	// Email template attachments
@@ -39,6 +41,13 @@ func (o *EmailTemplateRequest) GetID() *string {
 		return nil
 	}
 	return o.ID
+}
+
+func (o *EmailTemplateRequest) GetPurpose() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Purpose
 }
 
 func (o *EmailTemplateRequest) GetTags() []string {

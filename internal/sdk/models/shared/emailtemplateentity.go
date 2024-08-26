@@ -13,8 +13,9 @@ type EmailTemplateEntity struct {
 	// Entity ID
 	ID string `json:"_id"`
 	// Ivy Organization ID the entity belongs to
-	Org     string `json:"_org"`
-	Purpose any    `json:"_purpose,omitempty"`
+	Org string `json:"_org"`
+	// Entity purposes
+	Purpose []string `json:"_purpose,omitempty"`
 	// URL-friendly identifier for the entity schema
 	Schema string `json:"_schema"`
 	// Entity tags
@@ -83,7 +84,7 @@ func (o *EmailTemplateEntity) GetOrg() string {
 	return o.Org
 }
 
-func (o *EmailTemplateEntity) GetPurpose() any {
+func (o *EmailTemplateEntity) GetPurpose() []string {
 	if o == nil {
 		return nil
 	}

@@ -14,11 +14,9 @@ func (r *EmailTemplateDataSourceModel) RefreshFromSharedEmailTemplateEntity(resp
 	if resp != nil {
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
 		r.Org = types.StringValue(resp.Org)
-		if resp.Purpose == nil {
-			r.Purpose = types.StringNull()
-		} else {
-			purposeResult, _ := json.Marshal(resp.Purpose)
-			r.Purpose = types.StringValue(string(purposeResult))
+		r.Purpose = []types.String{}
+		for _, v := range resp.Purpose {
+			r.Purpose = append(r.Purpose, types.StringValue(v))
 		}
 		r.Schema = types.StringValue(resp.Schema)
 		r.Tags = []types.String{}

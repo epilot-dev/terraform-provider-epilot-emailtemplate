@@ -257,6 +257,13 @@ components:
           description: Updated date
           format: date-time
           example: 2021-02-10T09:14:31.990Z
+        _purpose:
+          type: array
+          description: Entity purposes
+          items:
+            type: string
+          example:
+            - "46b5b1ad-b069-4bd5-87f6-f3af9f949d1e"
     EmailTemplateRequest:
       type: object
       required:
@@ -273,6 +280,13 @@ components:
             type: string
           example:
           - template
+        _purpose:
+          type: array
+          description: Entity purposes
+          items:
+            type: string
+          example:
+            - "46b5b1ad-b069-4bd5-87f6-f3af9f949d1e"
         name:
           description: name
           type: string
