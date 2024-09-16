@@ -4,7 +4,7 @@ package shared
 
 type EmailTemplateRequest struct {
 	ID *string `json:"_id,omitempty"`
-	// Entity purposes
+	// Entity Purposes
 	Purpose []string `json:"_purpose,omitempty"`
 	// Entity tags
 	Tags []string `json:"_tags,omitempty"`

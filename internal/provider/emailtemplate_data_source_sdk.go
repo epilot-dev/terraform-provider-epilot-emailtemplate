@@ -13,6 +13,10 @@ import (
 func (r *EmailTemplateDataSourceModel) RefreshFromSharedEmailTemplateEntity(resp *shared.EmailTemplateEntity) {
 	if resp != nil {
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
+		r.Manifest = []types.String{}
+		for _, v := range resp.Manifest {
+			r.Manifest = append(r.Manifest, types.StringValue(v))
+		}
 		r.Org = types.StringValue(resp.Org)
 		r.Purpose = []types.String{}
 		for _, v := range resp.Purpose {

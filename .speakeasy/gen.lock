@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: fc81f55179c2c37c3e36d331e7b40f24
+  docChecksum: a861b3da11b189efa0399cf87800ff0e
   docVersion: 1.0.0-RFC
-  speakeasyVersion: 1.379.0
-  generationVersion: 2.404.3
-  releaseVersion: 0.4.1
-  configChecksum: ee9a992a1e3c54bd564e3f8256eb17ca
+  speakeasyVersion: 1.396.7
+  generationVersion: 2.415.6
+  releaseVersion: 0.4.3
+  configChecksum: b1234c6f64b86c80022f6062b933954a
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.4
-    core: 3.24.7
+    core: 3.24.11
     deprecations: 2.81.1
     envVarSecurityUsage: 0.1.0
     globalSecurity: 2.81.8
@@ -20,47 +20,14 @@ features:
     retries: 2.81.1
     unions: 2.81.16
 generatedFiles:
-  - internal/sdk/emailtemplates.go
-  - internal/sdk/variables.go
-  - internal/sdk/sdk.go
-  - internal/sdk/models/errors/sdkerror.go
-  - internal/sdk/retry/config.go
-  - internal/sdk/types/bigint.go
-  - internal/sdk/types/date.go
-  - internal/sdk/types/datetime.go
-  - internal/sdk/types/decimal.go
-  - internal/sdk/types/pointers.go
-  - internal/sdk/internal/utils/contenttype.go
-  - internal/sdk/internal/utils/form.go
-  - internal/sdk/internal/utils/headers.go
-  - internal/sdk/internal/utils/json.go
-  - internal/sdk/internal/utils/pathparams.go
-  - internal/sdk/internal/utils/queryparams.go
-  - internal/sdk/internal/utils/requestbody.go
-  - internal/sdk/internal/utils/retries.go
-  - internal/sdk/internal/utils/security.go
-  - internal/sdk/internal/utils/utils.go
-  - internal/sdk/models/operations/bulksendmessage.go
-  - internal/sdk/models/operations/gettemplatedetail.go
-  - internal/sdk/models/operations/reverttooriginaltemplate.go
-  - internal/sdk/models/operations/savetemplate.go
-  - internal/sdk/models/operations/replacevariables.go
-  - internal/sdk/models/operations/replacevariablesasync.go
-  - internal/sdk/models/shared/bulksendmessagejob.go
-  - internal/sdk/models/shared/bulksendmessagerequest.go
-  - internal/sdk/models/shared/bulksendmessagerequestwithquery.go
-  - internal/sdk/models/shared/emailtemplateresponse.go
-  - internal/sdk/models/shared/emailtemplateentity.go
-  - internal/sdk/models/shared/emailtemplaterequest.go
-  - internal/sdk/models/shared/variableparameters.go
-  - internal/sdk/models/shared/templatetype.go
-  - internal/sdk/models/shared/asyncemailtemplateresponse.go
-  - internal/sdk/models/shared/security.go
-  - internal/sdk/.gitignore
-  - internal/sdk/models/operations/options.go
-  - internal/sdk/.gitattributes
-  - internal/sdk/internal/hooks/hooks.go
+  - .gitattributes
+  - CONTRIBUTING.md
+  - USAGE.md
   - examples/README.md
+  - examples/data-sources/epilot-emailtemplate_email_template/data-source.tf
+  - examples/provider/provider.tf
+  - examples/resources/epilot-emailtemplate_email_template/import.sh
+  - examples/resources/epilot-emailtemplate_email_template/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -73,6 +40,11 @@ generatedFiles:
   - internal/planmodifiers/setplanmodifier/suppress_diff.go
   - internal/planmodifiers/stringplanmodifier/suppress_diff.go
   - internal/planmodifiers/utils/state_check.go
+  - internal/provider/emailtemplate_data_source.go
+  - internal/provider/emailtemplate_data_source_sdk.go
+  - internal/provider/emailtemplate_resource.go
+  - internal/provider/emailtemplate_resource_sdk.go
+  - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
   - internal/provider/reflect/generic_attr_value.go
@@ -88,6 +60,51 @@ generatedFiles:
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
   - internal/provider/utils.go
+  - internal/sdk/.gitattributes
+  - internal/sdk/.gitignore
+  - internal/sdk/emailtemplates.go
+  - internal/sdk/internal/hooks/hooks.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/models/errors/sdkerror.go
+  - internal/sdk/models/operations/bulksendmessage.go
+  - internal/sdk/models/operations/createfeaturesystemtemplates.go
+  - internal/sdk/models/operations/createsystemtemplates.go
+  - internal/sdk/models/operations/createsystemtemplatesbynames.go
+  - internal/sdk/models/operations/gettemplatedetail.go
+  - internal/sdk/models/operations/options.go
+  - internal/sdk/models/operations/replacevariables.go
+  - internal/sdk/models/operations/replacevariablesasync.go
+  - internal/sdk/models/operations/reverttooriginaltemplate.go
+  - internal/sdk/models/operations/savetemplate.go
+  - internal/sdk/models/shared/asyncemailtemplateresponse.go
+  - internal/sdk/models/shared/baseentity.go
+  - internal/sdk/models/shared/bulksendmessagejob.go
+  - internal/sdk/models/shared/bulksendmessagerequest.go
+  - internal/sdk/models/shared/bulksendmessagerequestwithquery.go
+  - internal/sdk/models/shared/createsystemtemplatesreq.go
+  - internal/sdk/models/shared/emailtemplateentity.go
+  - internal/sdk/models/shared/emailtemplaterequest.go
+  - internal/sdk/models/shared/emailtemplateresponse.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/models/shared/templatetype.go
+  - internal/sdk/models/shared/variableparameters.go
+  - internal/sdk/retry/config.go
+  - internal/sdk/sdk.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/decimal.go
+  - internal/sdk/types/pointers.go
+  - internal/sdk/variables.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
   - internal/validators/JSONParseValidator.go
@@ -104,15 +121,57 @@ generatedFiles:
   - main.go
   - terraform-registry-manifest.json
   - tools/tools.go
-  - USAGE.md
-  - internal/provider/provider.go
-  - examples/provider/provider.tf
-  - examples/resources/epilot-emailtemplate_email_template/import.sh
-  - internal/provider/emailtemplate_resource.go
-  - internal/provider/emailtemplate_resource_sdk.go
-  - examples/resources/epilot-emailtemplate_email_template/resource.tf
-  - internal/provider/emailtemplate_data_source.go
-  - internal/provider/emailtemplate_data_source_sdk.go
-  - examples/data-sources/epilot-emailtemplate_email_template/data-source.tf
-  - .gitattributes
-  - CONTRIBUTING.md
+examples:
+  bulkSendMessage:
+    speakeasy-default-bulk-send-message:
+      requestBody:
+        application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "recipient_query": "_schema:contact AND consent_email_marketing:active"}
+      responses:
+        "200":
+          application/json: {"created_by": "1234", "failed": [], "job_id": "8c086140-f33e-4bb7-a993-50c0f2402c7b", "org_id": "206801", "queued": [], "request": {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "recipient_ids": ["3fa85f64-5717-4562-b3fc-2c963f66afa6", "3fa85f64-5717-4562-b3fc-2c963f66afa7", "3fa85f64-5717-4562-b3fc-2c963f66afa8"]}, "sent": [], "status": "CANCELLED", "task_token": "8c086140-f33e-4bb7-a993-50c0f2402c7b"}
+  getTemplateDetail:
+    speakeasy-default-get-template-detail:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
+  revertToOriginalTemplate:
+    speakeasy-default-revert-to-original-template:
+      requestBody:
+        application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c"}
+  saveTemplate:
+    speakeasy-default-save-template:
+      requestBody:
+        application/json: {"_id": "cd7809ba-a111-4dd9-8d15-18eb4de0faed", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_tags": ["template"], "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+      responses:
+        "200":
+          application/json: {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+  replaceVariables:
+    speakeasy-default-replace-variables:
+      requestBody:
+        application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "variable_parameters": {"custom_variables": [], "main_entity_id": "63753437-c9e2-4e83-82bb-b1c666514561", "template_type": "email", "user_id": "123452"}}
+      responses:
+        "200":
+          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
+  replaceVariablesAsync:
+    speakeasy-default-replace-variables-async:
+      requestBody:
+        application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "variable_parameters": {"custom_variables": [], "main_entity_id": "63753437-c9e2-4e83-82bb-b1c666514561", "template_type": "document", "user_id": "123452"}}
+      responses:
+        "200":
+          application/json: {"doc_progress_count": {"completed": 5, "total": 10}, "job_id": "8c086140-f33e-4bb7-a993-50c0f2402c7b", "result": {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}, "status": "PROCESSING"}
+  createFeatureSystemTemplates:
+    speakeasy-default-create-feature-system-templates:
+      requestBody:
+        application/json: {"featureKey": "end_customer_portal"}
+  createSystemTemplates:
+    speakeasy-default-create-system-templates: {}
+  createSystemTemplatesByNames:
+    speakeasy-default-create-system-templates-by-names:
+      requestBody:
+        application/json: {"template_names": ["DoubleOptIn_Email_DE", "Einladung Kundenportal", "Partner_Kooperation_Email_DE"]}
+      responses:
+        "200":
+          application/json: []

@@ -14,16 +14,34 @@ EmailTemplate Resource
 
 ```terraform
 resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
-  id              = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
-  body            = "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly"
-  brand_id        = 0
-  created_by      = 1234
-  file            = "{ \"see\": \"documentation\" }"
-  from            = "{ \"see\": \"documentation\" }"
-  name            = "Order confirmation"
+  attachments = [
+    "{ \"see\": \"documentation\" }"
+  ]
+  bcc = [
+    "{ \"see\": \"documentation\" }"
+  ]
+  body     = "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly"
+  brand_id = 0
+  cc = [
+    "{ \"see\": \"documentation\" }"
+  ]
+  created_by = 1234
+  file       = "{ \"see\": \"documentation\" }"
+  from       = "{ \"see\": \"documentation\" }"
+  id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
+  name       = "Order confirmation"
+  purpose = [
+    "..."
+  ]
   subject         = "We have received your order!"
   system_template = false
-  updated_by      = 1234
+  tags = [
+    "..."
+  ]
+  to = [
+    "{ \"see\": \"documentation\" }"
+  ]
+  updated_by = 1234
 }
 ```
 
@@ -43,13 +61,12 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `brand_id` (Number) Brand ID. Equal 0 if available for All brands. Requires replacement if changed.
 - `cc` (List of String) Cc. Requires replacement if changed.
 - `created_by` (String) Created by. Requires replacement if changed.
-- `file` (String) Parsed as JSON.
-- `from` (String) Parsed as JSON.
+- `file` (String) Requires replacement if changed.; Parsed as JSON.
+- `from` (String) Requires replacement if changed.; Parsed as JSON.
 - `id` (String) Requires replacement if changed.
-- `purpose` (List of String) Entity purposes. Requires replacement if changed.
+- `purpose` (List of String) Entity Purposes. Requires replacement if changed.
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
 Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature
-
 Requires replacement if changed.
 - `tags` (List of String) Entity tags. Requires replacement if changed.
 - `to` (List of String) To. Requires replacement if changed.
@@ -58,6 +75,7 @@ Requires replacement if changed.
 ### Read-Only
 
 - `created_at` (String) Created date
+- `manifest` (List of String) Manifest ID used to create/update the entity
 - `org` (String) Ivy Organization ID the entity belongs to
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title

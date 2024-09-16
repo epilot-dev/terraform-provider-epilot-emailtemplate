@@ -51,6 +51,7 @@ type EmailTemplateResourceModel struct {
 	File           types.String   `tfsdk:"file"`
 	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
+	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
 	Org            types.String   `tfsdk:"org"`
 	Purpose        []types.String `tfsdk:"purpose"`
@@ -74,57 +75,57 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 		Attributes: map[string]schema.Attribute{
 			"attachments": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Email template attachments. Requires replacement if changed. `,
+				Description: `Email template attachments. Requires replacement if changed.`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
 			"bcc": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Bcc. Requires replacement if changed. `,
+				Description: `Bcc. Requires replacement if changed.`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
 			"body": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Body. Requires replacement if changed. `,
+				Description: `Body. Requires replacement if changed.`,
 			},
 			"brand_id": schema.NumberAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Number{
 					numberplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_numberplanmodifier.SuppressDiff(speakeasy_numberplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Brand ID. Equal 0 if available for All brands. Requires replacement if changed. `,
+				Description: `Brand ID. Equal 0 if available for All brands. Requires replacement if changed.`,
 			},
 			"cc": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Cc. Requires replacement if changed. `,
+				Description: `Cc. Requires replacement if changed.`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
@@ -138,53 +139,58 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"created_by": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Created by. Requires replacement if changed. `,
+				Description: `Created by. Requires replacement if changed.`,
 			},
 			"file": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Parsed as JSON.`,
+				Description: `Requires replacement if changed.; Parsed as JSON.`,
 				Validators: []validator.String{
 					validators.IsValidJSON(),
 				},
 			},
 			"from": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Parsed as JSON.`,
+				Description: `Requires replacement if changed.; Parsed as JSON.`,
 				Validators: []validator.String{
 					validators.IsValidJSON(),
 				},
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Requires replacement if changed. `,
+				Description: `Requires replacement if changed.`,
+			},
+			"manifest": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Manifest ID used to create/update the entity`,
 			},
 			"name": schema.StringAttribute{
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Required:    true,
-				Description: `name. Requires replacement if changed. `,
+				Description: `name. Requires replacement if changed.`,
 			},
 			"org": schema.StringAttribute{
 				Computed:    true,
@@ -192,47 +198,46 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"purpose": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Entity purposes. Requires replacement if changed. `,
+				Description: `Entity Purposes. Requires replacement if changed.`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
 				Description: `URL-friendly identifier for the entity schema`,
 			},
 			"subject": schema.StringAttribute{
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Required:    true,
-				Description: `Subject. Requires replacement if changed. `,
+				Description: `Subject. Requires replacement if changed.`,
 			},
 			"system_template": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
-				Optional: true,
 				MarkdownDescription: `If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...` + "\n" +
 					`Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature` + "\n" +
-					`` + "\n" +
-					`Requires replacement if changed. `,
+					`Requires replacement if changed.`,
 			},
 			"tags": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Entity tags. Requires replacement if changed. `,
+				Description: `Entity tags. Requires replacement if changed.`,
 			},
 			"title": schema.StringAttribute{
 				Computed:    true,
@@ -240,13 +245,13 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"to": schema.ListAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
 				ElementType: types.StringType,
-				Description: `To. Requires replacement if changed. `,
+				Description: `To. Requires replacement if changed.`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
@@ -260,12 +265,12 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"updated_by": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Optional:    true,
-				Description: `Updated by. Requires replacement if changed. `,
+				Description: `Updated by. Requires replacement if changed.`,
 			},
 		},
 	}

@@ -38,6 +38,7 @@ type EmailTemplateDataSourceModel struct {
 	File           types.String   `tfsdk:"file"`
 	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
+	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
 	Org            types.String   `tfsdk:"org"`
 	Purpose        []types.String `tfsdk:"purpose"`
@@ -105,6 +106,11 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Required:    true,
 				Description: `Template entity ID`,
 			},
+			"manifest": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Manifest ID used to create/update the entity`,
+			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `name`,
@@ -116,7 +122,7 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 			"purpose": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `Entity purposes`,
+				Description: `Entity Purposes`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
@@ -129,8 +135,7 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 			"system_template": schema.BoolAttribute{
 				Computed: true,
 				MarkdownDescription: `If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...` + "\n" +
-					`Remember to add default content of template to system_template enum for revert to original feature` + "\n" +
-					``,
+					`Remember to add default content of template to system_template enum for revert to original feature`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,

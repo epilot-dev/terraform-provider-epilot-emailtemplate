@@ -36,9 +36,10 @@ data "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `created_by` (String) Created by
 - `file` (String) Parsed as JSON.
 - `from` (String) Parsed as JSON.
+- `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) name
 - `org` (String) Ivy Organization ID the entity belongs to
-- `purpose` (List of String) Entity purposes
+- `purpose` (List of String) Entity Purposes
 - `schema` (String) URL-friendly identifier for the entity schema
 - `subject` (String) Subject
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...

@@ -118,6 +118,10 @@ func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *
 	if resp != nil {
 		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
 		r.ID = types.StringValue(resp.ID)
+		r.Manifest = []types.String{}
+		for _, v := range resp.Manifest {
+			r.Manifest = append(r.Manifest, types.StringValue(v))
+		}
 		r.Org = types.StringValue(resp.Org)
 		r.Purpose = []types.String{}
 		for _, v := range resp.Purpose {

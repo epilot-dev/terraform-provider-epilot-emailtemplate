@@ -34,20 +34,20 @@ actions:
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["attachments"]["items"]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]
-    update: 
+    update:
       file: {}
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["attachments"]
-    update: 
+    update:
       items: {}
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["file"]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]
-    update: 
+    update:
       file: {}
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["attachments"]["items"]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["attachments"]
-    update: 
+    update:
       items: {}
   - target: $["components"]["schemas"]["EmailTemplateResponse"]["properties"]["relations"]
     remove: true
@@ -65,9 +65,9 @@ actions:
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]
     update:
       from: {}
-      to: 
+      to:
         items: {}
-      cc: 
+      cc:
         items: {}
       bcc:
         items: {}
@@ -82,9 +82,9 @@ actions:
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]
     update:
       from: {}
-      to: 
+      to:
         items: {}
-      cc: 
+      cc:
         items: {}
       bcc:
         items: {}
@@ -98,16 +98,14 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["approved_at"]["readonly"]
     remove: true
-  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["approved_action"]["readonly"]
+  - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["approve_action"]["readonly"]
     remove: true
   - target: $["components"]["schemas"]["BulkSendMessageJob"]["properties"]["task_token"]["readonly"]
     remove: true
-  - target: $["security"]["AsOrganization"]
+  - target: $["security"][1]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateResponse"]["properties"]["relations"]
     remove: true
   - target: $["components"]["schemas"]["BaseEntity"]["properties"]
     update:
       _purpose: {}
-
-

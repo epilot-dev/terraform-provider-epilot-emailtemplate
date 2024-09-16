@@ -37,8 +37,7 @@ func (p *EpilotEmailtemplateProvider) Metadata(ctx context.Context, req provider
 
 func (p *EpilotEmailtemplateProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: `Email template API: Email template API service` + "\n" +
-			``,
+		Description: `Email template API: Email template API service`,
 		Attributes: map[string]schema.Attribute{
 			"server_url": schema.StringAttribute{
 				MarkdownDescription: "Server URL (defaults to https://email-template.sls.epilot.io)",

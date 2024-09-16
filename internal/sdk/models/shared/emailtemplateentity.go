@@ -12,9 +12,11 @@ type EmailTemplateEntity struct {
 	CreatedAt time.Time `json:"_created_at"`
 	// Entity ID
 	ID string `json:"_id"`
+	// Manifest ID used to create/update the entity
+	Manifest []string `json:"_manifest,omitempty"`
 	// Ivy Organization ID the entity belongs to
 	Org string `json:"_org"`
-	// Entity purposes
+	// Entity Purposes
 	Purpose []string `json:"_purpose,omitempty"`
 	// URL-friendly identifier for the entity schema
 	Schema string `json:"_schema"`
@@ -75,6 +77,13 @@ func (o *EmailTemplateEntity) GetID() string {
 		return ""
 	}
 	return o.ID
+}
+
+func (o *EmailTemplateEntity) GetManifest() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Manifest
 }
 
 func (o *EmailTemplateEntity) GetOrg() string {
