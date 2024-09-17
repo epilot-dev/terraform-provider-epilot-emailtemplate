@@ -17,6 +17,10 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	} else {
 		id = nil
 	}
+	var manifest []string = []string{}
+	for _, manifestItem := range r.Manifest {
+		manifest = append(manifest, manifestItem.ValueString())
+	}
 	var purpose []string = []string{}
 	for _, purposeItem := range r.Purpose {
 		purpose = append(purpose, purposeItem.ValueString())
@@ -95,6 +99,7 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	}
 	out := shared.EmailTemplateRequest{
 		ID:             id,
+		Manifest:       manifest,
 		Purpose:        purpose,
 		Tags:           tags,
 		Attachments:    attachments,

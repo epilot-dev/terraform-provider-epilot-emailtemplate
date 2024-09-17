@@ -4,6 +4,8 @@ package shared
 
 type EmailTemplateRequest struct {
 	ID *string `json:"_id,omitempty"`
+	// Manifest ID used to create/update the entity
+	Manifest []string `json:"_manifest,omitempty"`
 	// Entity Purposes
 	Purpose []string `json:"_purpose,omitempty"`
 	// Entity tags
@@ -41,6 +43,13 @@ func (o *EmailTemplateRequest) GetID() *string {
 		return nil
 	}
 	return o.ID
+}
+
+func (o *EmailTemplateRequest) GetManifest() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Manifest
 }
 
 func (o *EmailTemplateRequest) GetPurpose() []string {
