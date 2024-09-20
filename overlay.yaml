@@ -64,7 +64,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]
     update:
-      from: {}
       to:
         items: {}
       cc:
@@ -81,7 +80,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]
     update:
-      from: {}
       to:
         items: {}
       cc:

@@ -63,12 +63,6 @@ func (r *EmailTemplateDataSourceModel) RefreshFromSharedEmailTemplateEntity(resp
 			fileResult, _ := json.Marshal(resp.File)
 			r.File = types.StringValue(string(fileResult))
 		}
-		if resp.From == nil {
-			r.From = types.StringNull()
-		} else {
-			fromResult, _ := json.Marshal(resp.From)
-			r.From = types.StringValue(string(fromResult))
-		}
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		r.Subject = types.StringPointerValue(resp.Subject)

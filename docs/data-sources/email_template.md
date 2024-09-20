@@ -35,7 +35,6 @@ data "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `created_at` (String) Created date
 - `created_by` (String) Created by
 - `file` (String) Parsed as JSON.
-- `from` (String) Parsed as JSON.
 - `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) name
 - `org` (String) Ivy Organization ID the entity belongs to

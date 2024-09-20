@@ -49,7 +49,6 @@ type EmailTemplateResourceModel struct {
 	CreatedAt      types.String   `tfsdk:"created_at"`
 	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
-	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
@@ -158,18 +157,6 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 					validators.IsValidJSON(),
 				},
 			},
-			"from": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.; Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
-			},
 			"id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -180,14 +167,9 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Requires replacement if changed.`,
 			},
 			"manifest": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				ElementType: types.StringType,
-				Description: `Manifest ID used to create/update the entity. Requires replacement if changed.`,
+				Description: `Manifest ID used to create/update the entity`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

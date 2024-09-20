@@ -36,7 +36,6 @@ type EmailTemplateDataSourceModel struct {
 	CreatedAt      types.String   `tfsdk:"created_at"`
 	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
-	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
@@ -95,10 +94,6 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Description: `Created by`,
 			},
 			"file": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-			},
-			"from": schema.StringAttribute{
 				Computed:    true,
 				Description: `Parsed as JSON.`,
 			},

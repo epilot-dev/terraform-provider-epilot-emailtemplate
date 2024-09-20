@@ -27,12 +27,8 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   created_by = 1234
   file       = "{ \"see\": \"documentation\" }"
-  from       = "{ \"see\": \"documentation\" }"
   id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
-  manifest = [
-    "123e4567-e89b-12d3-a456-426614174000"
-  ]
-  name = "Order confirmation"
+  name       = "Order confirmation"
   purpose = [
     "..."
   ]
@@ -65,9 +61,7 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `cc` (List of String) Cc. Requires replacement if changed.
 - `created_by` (String) Created by. Requires replacement if changed.
 - `file` (String) Requires replacement if changed.; Parsed as JSON.
-- `from` (String) Requires replacement if changed.; Parsed as JSON.
 - `id` (String) Requires replacement if changed.
-- `manifest` (List of String) Manifest ID used to create/update the entity. Requires replacement if changed.
 - `purpose` (List of String) Entity Purposes. Requires replacement if changed.
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
 Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature
@@ -79,6 +73,7 @@ Requires replacement if changed.
 ### Read-Only
 
 - `created_at` (String) Created date
+- `manifest` (List of String) Manifest ID used to create/update the entity
 - `org` (String) Ivy Organization ID the entity belongs to
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title

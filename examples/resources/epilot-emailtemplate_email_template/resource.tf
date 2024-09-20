@@ -12,12 +12,8 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   created_by = 1234
   file       = "{ \"see\": \"documentation\" }"
-  from       = "{ \"see\": \"documentation\" }"
   id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
-  manifest = [
-    "123e4567-e89b-12d3-a456-426614174000"
-  ]
-  name = "Order confirmation"
+  name       = "Order confirmation"
   purpose = [
     "..."
   ]

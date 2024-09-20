@@ -17,10 +17,6 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	} else {
 		id = nil
 	}
-	var manifest []string = []string{}
-	for _, manifestItem := range r.Manifest {
-		manifest = append(manifest, manifestItem.ValueString())
-	}
 	var purpose []string = []string{}
 	for _, purposeItem := range r.Purpose {
 		purpose = append(purpose, purposeItem.ValueString())
@@ -69,10 +65,6 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	if !r.File.IsUnknown() && !r.File.IsNull() {
 		_ = json.Unmarshal([]byte(r.File.ValueString()), &file)
 	}
-	var from interface{}
-	if !r.From.IsUnknown() && !r.From.IsNull() {
-		_ = json.Unmarshal([]byte(r.From.ValueString()), &from)
-	}
 	var name string
 	name = r.Name.ValueString()
 
@@ -99,7 +91,6 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	}
 	out := shared.EmailTemplateRequest{
 		ID:             id,
-		Manifest:       manifest,
 		Purpose:        purpose,
 		Tags:           tags,
 		Attachments:    attachments,
@@ -109,7 +100,6 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 		Cc:             cc,
 		CreatedBy:      createdBy,
 		File:           file,
-		From:           from,
 		Name:           name,
 		Subject:        subject,
 		SystemTemplate: systemTemplate,
@@ -172,12 +162,6 @@ func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *
 		} else {
 			fileResult, _ := json.Marshal(resp.File)
 			r.File = types.StringValue(string(fileResult))
-		}
-		if resp.From == nil {
-			r.From = types.StringNull()
-		} else {
-			fromResult, _ := json.Marshal(resp.From)
-			r.From = types.StringValue(string(fromResult))
 		}
 		r.Name = types.StringValue(resp.Name)
 		r.Subject = types.StringPointerValue(resp.Subject)
