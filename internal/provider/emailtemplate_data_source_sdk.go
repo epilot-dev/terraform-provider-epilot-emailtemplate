@@ -4,6 +4,7 @@ package provider
 
 import (
 	"encoding/json"
+	tfTypes "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"math/big"
@@ -62,6 +63,13 @@ func (r *EmailTemplateDataSourceModel) RefreshFromSharedEmailTemplateEntity(resp
 		} else {
 			fileResult, _ := json.Marshal(resp.File)
 			r.File = types.StringValue(string(fileResult))
+		}
+		if resp.From == nil {
+			r.From = nil
+		} else {
+			r.From = &tfTypes.From{}
+			r.From.Email = types.StringValue(resp.From.Email)
+			r.From.Name = types.StringValue(resp.From.Name)
 		}
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)

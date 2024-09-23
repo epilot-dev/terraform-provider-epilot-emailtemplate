@@ -54,8 +54,6 @@ actions:
   - target: $["components"]["schemas"]["EmailTemplateResponse"]["properties"]
     update:
       relations: {}
-  - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["from"]
-    remove: true
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["to"]["items"]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["cc"]["items"]
@@ -70,8 +68,6 @@ actions:
         items: {}
       bcc:
         items: {}
-  - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["from"]
-    remove: true
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["to"]["items"]
     remove: true
   - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["cc"]["items"]

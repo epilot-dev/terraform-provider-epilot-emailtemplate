@@ -4,6 +4,7 @@ package provider
 
 import (
 	"encoding/json"
+	tfTypes "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"math/big"
@@ -69,8 +70,21 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	if !r.File.IsUnknown() && !r.File.IsNull() {
 		_ = json.Unmarshal([]byte(r.File.ValueString()), &file)
 	}
-	var name string
-	name = r.Name.ValueString()
+	var from *shared.From
+	if r.From != nil {
+		var email string
+		email = r.From.Email.ValueString()
+
+		var name string
+		name = r.From.Name.ValueString()
+
+		from = &shared.From{
+			Email: email,
+			Name:  name,
+		}
+	}
+	var name1 string
+	name1 = r.Name.ValueString()
 
 	var subject string
 	subject = r.Subject.ValueString()
@@ -105,7 +119,8 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 		Cc:             cc,
 		CreatedBy:      createdBy,
 		File:           file,
-		Name:           name,
+		From:           from,
+		Name:           name1,
 		Subject:        subject,
 		SystemTemplate: systemTemplate,
 		To:             to,
@@ -167,6 +182,13 @@ func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *
 		} else {
 			fileResult, _ := json.Marshal(resp.File)
 			r.File = types.StringValue(string(fileResult))
+		}
+		if resp.From == nil {
+			r.From = nil
+		} else {
+			r.From = &tfTypes.From{}
+			r.From.Email = types.StringValue(resp.From.Email)
+			r.From.Name = types.StringValue(resp.From.Name)
 		}
 		r.Name = types.StringValue(resp.Name)
 		r.Subject = types.StringPointerValue(resp.Subject)

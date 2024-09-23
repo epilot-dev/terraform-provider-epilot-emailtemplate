@@ -8,10 +8,13 @@ import (
 	speakeasy_boolplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/boolplanmodifier"
 	speakeasy_listplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/listplanmodifier"
 	speakeasy_numberplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/numberplanmodifier"
+	speakeasy_objectplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators"
+	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -19,6 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -49,6 +53,7 @@ type EmailTemplateResourceModel struct {
 	CreatedAt      types.String   `tfsdk:"created_at"`
 	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
+	From           *tfTypes.From  `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
@@ -156,6 +161,41 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Validators: []validator.String{
 					validators.IsValidJSON(),
 				},
+			},
+			"from": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"email": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,

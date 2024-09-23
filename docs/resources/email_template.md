@@ -27,7 +27,11 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   created_by = 1234
   file       = "{ \"see\": \"documentation\" }"
-  id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
+  from = {
+    email = "no-reply@epilot.cloud"
+    name  = "epilot"
+  }
+  id = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
   manifest = [
     "123e4567-e89b-12d3-a456-426614174000"
   ]
@@ -64,6 +68,7 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `cc` (List of String) Cc. Requires replacement if changed.
 - `created_by` (String) Created by. Requires replacement if changed.
 - `file` (String) Requires replacement if changed.; Parsed as JSON.
+- `from` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--from))
 - `id` (String) Requires replacement if changed.
 - `manifest` (List of String) Manifest ID used to create/update the entity. Requires replacement if changed.
 - `purpose` (List of String) Entity Purposes. Requires replacement if changed.
@@ -81,6 +86,14 @@ Requires replacement if changed.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title
 - `updated_at` (String) Updated date
+
+<a id="nestedatt--from"></a>
+### Nested Schema for `from`
+
+Optional:
+
+- `email` (String) Not Null; Requires replacement if changed.
+- `name` (String) Not Null; Requires replacement if changed.
 
 ## Import
 

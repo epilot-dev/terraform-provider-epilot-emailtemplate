@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: 20cea1a118cf299816a83d90b90e864d
+  docChecksum: e2d0425d4726d35cab964457ff2831e8
   docVersion: 1.0.0-RFC
-  speakeasyVersion: 1.396.7
-  generationVersion: 2.415.6
-  releaseVersion: 0.4.6
-  configChecksum: f7ea49724bce3c9edd4f340a8415b0b2
+  speakeasyVersion: 1.393.2
+  generationVersion: 2.413.0
+  releaseVersion: 0.4.7
+  configChecksum: f58054814e75b692a1d4d3f3bf5954ff
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.4
-    core: 3.24.11
+    core: 3.24.9
     deprecations: 2.81.1
     envVarSecurityUsage: 0.1.0
     globalSecurity: 2.81.8
@@ -59,6 +59,7 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/types/from.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/.gitignore
@@ -89,6 +90,7 @@ generatedFiles:
   - internal/sdk/models/shared/emailtemplateentity.go
   - internal/sdk/models/shared/emailtemplaterequest.go
   - internal/sdk/models/shared/emailtemplateresponse.go
+  - internal/sdk/models/shared/from.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/templatetype.go
   - internal/sdk/models/shared/variableparameters.go
@@ -131,7 +133,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
+          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "from": {"email": "no-reply@epilot.cloud", "name": "epilot"}, "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
   revertToOriginalTemplate:
     speakeasy-default-revert-to-original-template:
       requestBody:
@@ -139,24 +141,24 @@ examples:
   saveTemplate:
     speakeasy-default-save-template:
       requestBody:
-        application/json: {"_id": "cd7809ba-a111-4dd9-8d15-18eb4de0faed", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_tags": ["template"], "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+        application/json: {"_id": "cd7809ba-a111-4dd9-8d15-18eb4de0faed", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_tags": ["template"], "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "from": {"email": "no-reply@epilot.cloud", "name": "epilot"}, "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
       responses:
         "200":
-          application/json: {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+          application/json: {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "from": {"email": "no-reply@epilot.cloud", "name": "epilot"}, "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
   replaceVariables:
     speakeasy-default-replace-variables:
       requestBody:
         application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "variable_parameters": {"custom_variables": [], "main_entity_id": "63753437-c9e2-4e83-82bb-b1c666514561", "template_type": "email", "user_id": "123452"}}
       responses:
         "200":
-          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
+          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "from": {"email": "no-reply@epilot.cloud", "name": "epilot"}, "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}
   replaceVariablesAsync:
     speakeasy-default-replace-variables-async:
       requestBody:
         application/json: {"email_template_id": "511ceb90-f738-47aa-8b1e-915ace0ae13c", "variable_parameters": {"custom_variables": [], "main_entity_id": "63753437-c9e2-4e83-82bb-b1c666514561", "template_type": "document", "user_id": "123452"}}
       responses:
         "200":
-          application/json: {"doc_progress_count": {"completed": 5, "total": 10}, "job_id": "8c086140-f33e-4bb7-a993-50c0f2402c7b", "result": {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}, "status": "PROCESSING"}
+          application/json: {"doc_progress_count": {"completed": 5, "total": 10}, "job_id": "8c086140-f33e-4bb7-a993-50c0f2402c7b", "result": {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "from": {"email": "no-reply@epilot.cloud", "name": "epilot"}, "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}, "status": "PROCESSING"}
   createFeatureSystemTemplates:
     speakeasy-default-create-feature-system-templates:
       requestBody:
