@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: f2bcc615c71932958dc8e0dffa6a6f60
+  docChecksum: 20cea1a118cf299816a83d90b90e864d
   docVersion: 1.0.0-RFC
-  speakeasyVersion: 1.393.2
-  generationVersion: 2.413.0
-  releaseVersion: 0.4.5
-  configChecksum: 94a252b71b1afe68bef7b56f67e9e609
+  speakeasyVersion: 1.396.7
+  generationVersion: 2.415.6
+  releaseVersion: 0.4.6
+  configChecksum: f7ea49724bce3c9edd4f340a8415b0b2
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.4
-    core: 3.24.9
+    core: 3.24.11
     deprecations: 2.81.1
     envVarSecurityUsage: 0.1.0
     globalSecurity: 2.81.8
@@ -139,7 +139,7 @@ examples:
   saveTemplate:
     speakeasy-default-save-template:
       requestBody:
-        application/json: {"_id": "cd7809ba-a111-4dd9-8d15-18eb4de0faed", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_tags": ["template"], "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+        application/json: {"_id": "cd7809ba-a111-4dd9-8d15-18eb4de0faed", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_tags": ["template"], "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
       responses:
         "200":
           application/json: {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}

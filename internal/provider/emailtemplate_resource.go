@@ -167,9 +167,14 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Requires replacement if changed.`,
 			},
 			"manifest": schema.ListAttribute{
-				Computed:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					listplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				ElementType: types.StringType,
-				Description: `Manifest ID used to create/update the entity`,
+				Description: `Manifest ID used to create/update the entity. Requires replacement if changed.`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
