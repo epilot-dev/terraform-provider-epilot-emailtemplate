@@ -23,7 +23,7 @@ type EmailTemplateRequest struct {
 	// Created by
 	CreatedBy *string `json:"created_by,omitempty"`
 	File      any     `json:"file,omitempty"`
-	From      *From   `json:"from,omitempty"`
+	From      any     `json:"from,omitempty"`
 	// name
 	Name string `json:"name"`
 	// Subject
@@ -115,7 +115,7 @@ func (o *EmailTemplateRequest) GetFile() any {
 	return o.File
 }
 
-func (o *EmailTemplateRequest) GetFrom() *From {
+func (o *EmailTemplateRequest) GetFrom() any {
 	if o == nil {
 		return nil
 	}

@@ -27,11 +27,8 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   created_by = 1234
   file       = "{ \"see\": \"documentation\" }"
-  from = {
-    email = "no-reply@epilot.cloud"
-    name  = "epilot"
-  }
-  id = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
+  from       = "{ \"see\": \"documentation\" }"
+  id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
   manifest = [
     "123e4567-e89b-12d3-a456-426614174000"
   ]
@@ -56,28 +53,27 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 
 ### Required
 
-- `name` (String) name. Requires replacement if changed.
-- `subject` (String) Subject. Requires replacement if changed.
+- `name` (String) name
+- `subject` (String) Subject
 
 ### Optional
 
-- `attachments` (List of String) Email template attachments. Requires replacement if changed.
-- `bcc` (List of String) Bcc. Requires replacement if changed.
-- `body` (String) Body. Requires replacement if changed.
-- `brand_id` (Number) Brand ID. Equal 0 if available for All brands. Requires replacement if changed.
-- `cc` (List of String) Cc. Requires replacement if changed.
-- `created_by` (String) Created by. Requires replacement if changed.
-- `file` (String) Requires replacement if changed.; Parsed as JSON.
-- `from` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--from))
-- `id` (String) Requires replacement if changed.
-- `manifest` (List of String) Manifest ID used to create/update the entity. Requires replacement if changed.
-- `purpose` (List of String) Entity Purposes. Requires replacement if changed.
+- `attachments` (List of String) Email template attachments
+- `bcc` (List of String) Bcc
+- `body` (String) Body
+- `brand_id` (Number) Brand ID. Equal 0 if available for All brands
+- `cc` (List of String) Cc
+- `created_by` (String) Created by
+- `file` (String) Parsed as JSON.
+- `from` (String) Parsed as JSON.
+- `id` (String) Template entity ID
+- `manifest` (List of String) Manifest ID used to create/update the entity
+- `purpose` (List of String) Entity Purposes
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
 Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature
-Requires replacement if changed.
-- `tags` (List of String) Entity tags. Requires replacement if changed.
-- `to` (List of String) To. Requires replacement if changed.
-- `updated_by` (String) Updated by. Requires replacement if changed.
+- `tags` (List of String) Entity tags
+- `to` (List of String) To
+- `updated_by` (String) Updated by
 
 ### Read-Only
 
@@ -86,14 +82,6 @@ Requires replacement if changed.
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title
 - `updated_at` (String) Updated date
-
-<a id="nestedatt--from"></a>
-### Nested Schema for `from`
-
-Optional:
-
-- `email` (String) Not Null; Requires replacement if changed.
-- `name` (String) Not Null; Requires replacement if changed.
 
 ## Import
 

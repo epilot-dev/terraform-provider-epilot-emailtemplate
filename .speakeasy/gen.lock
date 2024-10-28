@@ -1,23 +1,24 @@
 lockVersion: 2.0.0
 id: 4d794677-56ab-4749-ad3b-c155bc0fa40a
 management:
-  docChecksum: e2d0425d4726d35cab964457ff2831e8
+  docChecksum: f88128dcac920ced59fde1bf148d6550
   docVersion: 1.0.0-RFC
-  speakeasyVersion: 1.393.2
-  generationVersion: 2.413.0
-  releaseVersion: 0.4.7
-  configChecksum: f58054814e75b692a1d4d3f3bf5954ff
+  speakeasyVersion: 1.422.1
+  generationVersion: 2.438.15
+  releaseVersion: 0.6.4
+  configChecksum: e4a62cf9c08326f20bc05a083490a71f
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.4
-    core: 3.24.9
+    core: 3.25.0
     deprecations: 2.81.1
     envVarSecurityUsage: 0.1.0
-    globalSecurity: 2.81.8
+    globalSecurity: 2.81.9
     globalServerURLs: 2.82.1
     nullables: 0.0.0
     retries: 2.81.1
+    typeOverrides: 2.81.1
     unions: 2.81.16
 generatedFiles:
   - .gitattributes
@@ -59,7 +60,6 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
-  - internal/provider/types/from.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/.gitignore
@@ -77,20 +77,25 @@ generatedFiles:
   - internal/sdk/internal/utils/utils.go
   - internal/sdk/models/errors/sdkerror.go
   - internal/sdk/models/operations/bulksendmessage.go
+  - internal/sdk/models/operations/createfeaturesystemtemplates.go
+  - internal/sdk/models/operations/createsystemtemplates.go
+  - internal/sdk/models/operations/createsystemtemplatesbynames.go
   - internal/sdk/models/operations/gettemplatedetail.go
   - internal/sdk/models/operations/options.go
   - internal/sdk/models/operations/replacevariables.go
   - internal/sdk/models/operations/replacevariablesasync.go
   - internal/sdk/models/operations/reverttooriginaltemplate.go
   - internal/sdk/models/operations/savetemplate.go
+  - internal/sdk/models/operations/updatetemplatedetail.go
   - internal/sdk/models/shared/asyncemailtemplateresponse.go
+  - internal/sdk/models/shared/baseentity.go
   - internal/sdk/models/shared/bulksendmessagejob.go
   - internal/sdk/models/shared/bulksendmessagerequest.go
   - internal/sdk/models/shared/bulksendmessagerequestwithquery.go
+  - internal/sdk/models/shared/createsystemtemplatesreq.go
   - internal/sdk/models/shared/emailtemplateentity.go
   - internal/sdk/models/shared/emailtemplaterequest.go
   - internal/sdk/models/shared/emailtemplateresponse.go
-  - internal/sdk/models/shared/from.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/templatetype.go
   - internal/sdk/models/shared/variableparameters.go
@@ -172,3 +177,13 @@ examples:
       responses:
         "200":
           application/json: []
+  updateTemplateDetail:
+    speakeasy-default-update-template-detail:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}
+      responses:
+        "200":
+          application/json: {"entity": {"_created_at": "2021-02-09T12:41:43.662Z", "_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "_manifest": ["123e4567-e89b-12d3-a456-426614174000"], "_org": "206801", "_purpose": ["a0ec23ac-12f8-4d89-9a63-91cba3787f2a", "310cd388-2f15-4b5b-8f98-ca14c1e03304"], "_schema": "message", "_tags": ["automatic email template"], "_title": "<value>", "_updated_at": "2021-02-10T09:14:31.99Z", "body": "Hi Ms Ny Huynh, </br> Thank you for your order. We will contact you shortly", "brand_id": 0, "created_by": "1234", "name": "Order confirmation", "subject": "We have received your order!", "system_template": false, "updated_by": "1234"}}

@@ -39,7 +39,7 @@ type EmailTemplateEntity struct {
 	// Created by
 	CreatedBy *string `json:"created_by,omitempty"`
 	File      any     `json:"file,omitempty"`
-	From      *From   `json:"from,omitempty"`
+	From      any     `json:"from,omitempty"`
 	// name
 	Name string `json:"name"`
 	// Subject
@@ -177,7 +177,7 @@ func (o *EmailTemplateEntity) GetFile() any {
 	return o.File
 }
 
-func (o *EmailTemplateEntity) GetFrom() *From {
+func (o *EmailTemplateEntity) GetFrom() any {
 	if o == nil {
 		return nil
 	}

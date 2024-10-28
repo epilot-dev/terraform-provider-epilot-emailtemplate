@@ -35,7 +35,7 @@ data "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `created_at` (String) Created date
 - `created_by` (String) Created by
 - `file` (String) Parsed as JSON.
-- `from` (Attributes) (see [below for nested schema](#nestedatt--from))
+- `from` (String) Parsed as JSON.
 - `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) name
 - `org` (String) Ivy Organization ID the entity belongs to
@@ -49,11 +49,3 @@ Remember to add default content of template to system_template enum for revert t
 - `to` (List of String) To
 - `updated_at` (String) Updated date
 - `updated_by` (String) Updated by
-
-<a id="nestedatt--from"></a>
-### Nested Schema for `from`
-
-Read-Only:
-
-- `email` (String)
-- `name` (String)

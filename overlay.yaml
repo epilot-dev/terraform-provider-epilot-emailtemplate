@@ -21,6 +21,9 @@ actions:
   - target: $["paths"]["/v1/email-template/templates/{id}"]["get"]
     update:
       x-speakeasy-entity-operation: EmailTemplate#get
+  - target: $["paths"]["/v1/email-template/templates/{id}"]["put"]
+    update:
+      x-speakeasy-entity-operation: EmailTemplate#update
   - target: $["components"]["schemas"]["EmailTemplateEntity"]
     update:
       x-speakeasy-entity: EmailTemplate
@@ -103,3 +106,12 @@ actions:
   - target: $["components"]["schemas"]["BaseEntity"]["properties"]
     update:
       _purpose: {}
+  - target: $["components"]["schemas"]["EmailTemplateRequest"]["properties"]["from"]
+    update:
+      x-speakeasy-type-override: any
+  - target: $["components"]["schemas"]["EmailTemplateEntity"]["allOf"][1]["properties"]["from"]
+    update:
+      x-speakeasy-type-override: any
+  - target: $["components"]["schemas"]["From"]
+    update:
+      x-speakeasy-type-override: any

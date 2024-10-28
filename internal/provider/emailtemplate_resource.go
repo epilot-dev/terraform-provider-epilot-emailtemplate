@@ -5,26 +5,13 @@ package provider
 import (
 	"context"
 	"fmt"
-	speakeasy_boolplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/boolplanmodifier"
-	speakeasy_listplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/listplanmodifier"
-	speakeasy_numberplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/numberplanmodifier"
-	speakeasy_objectplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators"
-	speakeasy_stringvalidators "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/numberplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -53,7 +40,7 @@ type EmailTemplateResourceModel struct {
 	CreatedAt      types.String   `tfsdk:"created_at"`
 	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
-	From           *tfTypes.From  `tfsdk:"from"`
+	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
@@ -78,58 +65,38 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "EmailTemplate Resource",
 		Attributes: map[string]schema.Attribute{
 			"attachments": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Email template attachments. Requires replacement if changed.`,
+				Description: `Email template attachments`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
 			"bcc": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Bcc. Requires replacement if changed.`,
+				Description: `Bcc`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
 			},
 			"body": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Body. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Body`,
 			},
 			"brand_id": schema.NumberAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Number{
-					numberplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_numberplanmodifier.SuppressDiff(speakeasy_numberplanmodifier.ExplicitSuppress),
-				},
-				Description: `Brand ID. Equal 0 if available for All brands. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Brand ID. Equal 0 if available for All brands`,
 			},
 			"cc": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Cc. Requires replacement if changed.`,
+				Description: `Cc`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
@@ -142,148 +109,80 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"created_by": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Created by. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Created by`,
 			},
 			"file": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.; Parsed as JSON.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Parsed as JSON.`,
 				Validators: []validator.String{
 					validators.IsValidJSON(),
 				},
 			},
-			"from": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+			"from": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Parsed as JSON.`,
+				Validators: []validator.String{
+					validators.IsValidJSON(),
 				},
-				Attributes: map[string]schema.Attribute{
-					"email": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Not Null; Requires replacement if changed.`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Not Null; Requires replacement if changed.`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Template entity ID`,
 			},
 			"manifest": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Manifest ID used to create/update the entity. Requires replacement if changed.`,
+				Description: `Manifest ID used to create/update the entity`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `name. Requires replacement if changed.`,
+				Required:    true,
+				Description: `name`,
 			},
 			"org": schema.StringAttribute{
 				Computed:    true,
 				Description: `Ivy Organization ID the entity belongs to`,
 			},
 			"purpose": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Entity Purposes. Requires replacement if changed.`,
+				Description: `Entity Purposes`,
 			},
 			"schema": schema.StringAttribute{
 				Computed:    true,
 				Description: `URL-friendly identifier for the entity schema`,
 			},
 			"subject": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Subject. Requires replacement if changed.`,
+				Required:    true,
+				Description: `Subject`,
 			},
 			"system_template": schema.BoolAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
 				MarkdownDescription: `If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...` + "\n" +
-					`Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature` + "\n" +
-					`Requires replacement if changed.`,
+					`Remember to add default content of template to [system-template.ts](https://gitlab.com/e-pilot/product/email-templates/svc-email-templates-api/-/blob/main/lambda/HandlerFunction/src/enum/system-template.ts) enum for revert to original feature`,
 			},
 			"tags": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Entity tags. Requires replacement if changed.`,
+				Description: `Entity tags`,
 			},
 			"title": schema.StringAttribute{
 				Computed:    true,
 				Description: `Entity title`,
 			},
 			"to": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `To. Requires replacement if changed.`,
+				Description: `To`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
 				},
@@ -296,13 +195,9 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"updated_by": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Updated by. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Updated by`,
 			},
 		},
 	}
@@ -442,7 +337,36 @@ func (r *EmailTemplateResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	// Not Implemented; all attributes marked as RequiresReplace
+	emailTemplateEntity := data.ToSharedEmailTemplateEntity()
+	var id string
+	id = data.ID.ValueString()
+
+	request := operations.UpdateTemplateDetailRequest{
+		EmailTemplateEntity: emailTemplateEntity,
+		ID:                  id,
+	}
+	res, err := r.client.EmailTemplates.UpdateTemplateDetail(ctx, request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.EmailTemplateResponse != nil && res.EmailTemplateResponse.Entity != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateResponse.Entity)
+	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

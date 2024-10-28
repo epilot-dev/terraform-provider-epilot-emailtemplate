@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/types"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -37,7 +36,7 @@ type EmailTemplateDataSourceModel struct {
 	CreatedAt      types.String   `tfsdk:"created_at"`
 	CreatedBy      types.String   `tfsdk:"created_by"`
 	File           types.String   `tfsdk:"file"`
-	From           *tfTypes.From  `tfsdk:"from"`
+	From           types.String   `tfsdk:"from"`
 	ID             types.String   `tfsdk:"id"`
 	Manifest       []types.String `tfsdk:"manifest"`
 	Name           types.String   `tfsdk:"name"`
@@ -99,16 +98,9 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:    true,
 				Description: `Parsed as JSON.`,
 			},
-			"from": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"email": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
+			"from": schema.StringAttribute{
+				Computed:    true,
+				Description: `Parsed as JSON.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
