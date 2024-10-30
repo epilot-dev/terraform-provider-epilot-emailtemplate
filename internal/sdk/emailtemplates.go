@@ -1305,7 +1305,7 @@ func (s *EmailTemplates) UpdateTemplateDetail(ctx context.Context, request opera
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmailTemplateEntity", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmailTemplateRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1439,12 +1439,12 @@ func (s *EmailTemplates) UpdateTemplateDetail(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.EmailTemplateResponse
+			var out shared.EmailTemplateEntity
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.EmailTemplateResponse = &out
+			res.EmailTemplateEntity = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

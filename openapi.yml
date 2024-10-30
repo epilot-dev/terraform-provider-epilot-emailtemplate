@@ -82,14 +82,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmailTemplateEntity"
+              $ref: "#/components/schemas/EmailTemplateRequest"
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EmailTemplateResponse"
+                $ref: "#/components/schemas/EmailTemplateEntity"
         403:
           description: Forbidden
         404:

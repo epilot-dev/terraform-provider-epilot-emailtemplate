@@ -8,16 +8,16 @@ import (
 )
 
 type UpdateTemplateDetailRequest struct {
-	EmailTemplateEntity *shared.EmailTemplateEntity `request:"mediaType=application/json"`
+	EmailTemplateRequest *shared.EmailTemplateRequest `request:"mediaType=application/json"`
 	// Template entity ID
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (o *UpdateTemplateDetailRequest) GetEmailTemplateEntity() *shared.EmailTemplateEntity {
+func (o *UpdateTemplateDetailRequest) GetEmailTemplateRequest() *shared.EmailTemplateRequest {
 	if o == nil {
 		return nil
 	}
-	return o.EmailTemplateEntity
+	return o.EmailTemplateRequest
 }
 
 func (o *UpdateTemplateDetailRequest) GetID() string {
@@ -31,7 +31,7 @@ type UpdateTemplateDetailResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// Success
-	EmailTemplateResponse *shared.EmailTemplateResponse
+	EmailTemplateEntity *shared.EmailTemplateEntity
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
@@ -45,11 +45,11 @@ func (o *UpdateTemplateDetailResponse) GetContentType() string {
 	return o.ContentType
 }
 
-func (o *UpdateTemplateDetailResponse) GetEmailTemplateResponse() *shared.EmailTemplateResponse {
+func (o *UpdateTemplateDetailResponse) GetEmailTemplateEntity() *shared.EmailTemplateEntity {
 	if o == nil {
 		return nil
 	}
-	return o.EmailTemplateResponse
+	return o.EmailTemplateEntity
 }
 
 func (o *UpdateTemplateDetailResponse) GetStatusCode() int {

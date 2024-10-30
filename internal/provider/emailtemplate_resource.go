@@ -337,13 +337,13 @@ func (r *EmailTemplateResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	emailTemplateEntity := data.ToSharedEmailTemplateEntity()
+	emailTemplateRequest := data.ToSharedEmailTemplateRequest()
 	var id string
 	id = data.ID.ValueString()
 
 	request := operations.UpdateTemplateDetailRequest{
-		EmailTemplateEntity: emailTemplateEntity,
-		ID:                  id,
+		EmailTemplateRequest: emailTemplateRequest,
+		ID:                   id,
 	}
 	res, err := r.client.EmailTemplates.UpdateTemplateDetail(ctx, request)
 	if err != nil {
@@ -361,11 +361,11 @@ func (r *EmailTemplateResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.EmailTemplateResponse != nil && res.EmailTemplateResponse.Entity != nil) {
+	if !(res.EmailTemplateEntity != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateResponse.Entity)
+	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateEntity)
 	refreshPlan(ctx, plan, &data, resp.Diagnostics)
 
 	// Save updated data into Terraform state
