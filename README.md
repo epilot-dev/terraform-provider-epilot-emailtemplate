@@ -59,7 +59,7 @@ terraform {
   required_providers {
     epilot-emailtemplate = {
       source  = "epilot-dev/epilot-emailtemplate"
-      version = "0.6.6"
+      version = "0.6.7"
     }
   }
 }

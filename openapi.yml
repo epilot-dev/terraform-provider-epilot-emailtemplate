@@ -584,7 +584,6 @@ components:
     From:
       type: object
       required:
-        - name
         - email
       properties:
         name:
@@ -596,7 +595,6 @@ components:
     To:
       type: object
       required:
-        - name
         - email
       properties:
         name:
