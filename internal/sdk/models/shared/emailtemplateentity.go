@@ -59,7 +59,7 @@ func (e EmailTemplateEntity) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EmailTemplateEntity) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"_created_at", "_id", "_org", "_schema", "_title", "_updated_at", "name"}); err != nil {
 		return err
 	}
 	return nil

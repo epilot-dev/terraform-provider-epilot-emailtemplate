@@ -34,12 +34,13 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   name = "Order confirmation"
   purpose = [
-    "..."
+    "a0ec23ac-12f8-4d89-9a63-91cba3787f2a",
+    "310cd388-2f15-4b5b-8f98-ca14c1e03304",
   ]
   subject         = "We have received your order!"
   system_template = false
   tags = [
-    "..."
+    "template",
   ]
   to = [
     "{ \"see\": \"documentation\" }"
@@ -87,6 +88,17 @@ Remember to add default content of template to [system-template.ts](https://gitl
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = epilot-emailtemplate_email_template.my_epilot-emailtemplate_email_template
+  id = "..."
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import epilot-emailtemplate_email_template.my_epilot-emailtemplate_email_template ""
+terraform import epilot-emailtemplate_email_template.my_epilot-emailtemplate_email_template "..."
 ```

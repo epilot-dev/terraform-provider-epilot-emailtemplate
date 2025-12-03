@@ -2,17 +2,44 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/utils"
+)
+
 // BulkSendMessageRequestWithQuery - It takes an entity query to derive recipient_ids, treating each as a separate mainEntity to construct individual messages.
 // For e.g; if the query is provided as `_schema:opportunity AND status:PENDING`,
 //
 //	then all the opportunity Ids with status PENDING are treated as separate mainEntity to construct individual messages.
 type BulkSendMessageRequestWithQuery struct {
+	// Custom variables to be replaced in the email template
+	CustomVariables []CustomVariables `json:"custom_variables,omitempty"`
 	// ID of email template to use for sending bulk emails
 	EmailTemplateID string `json:"email_template_id"`
+	// If true then include unsubscribe link in the email body
+	//
+	MustIncludeUnsubscribeLink *bool `default:"false" json:"must_include_unsubscribe_link"`
 	// Entity search query to select recipients
 	RecipientQuery string `json:"recipient_query"`
 	// When true, it lets to send only the email by skip creating the thread & message entities.
 	SkipCreatingEntities *bool `json:"skip_creating_entities,omitempty"`
+}
+
+func (b BulkSendMessageRequestWithQuery) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BulkSendMessageRequestWithQuery) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"email_template_id", "recipient_query"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *BulkSendMessageRequestWithQuery) GetCustomVariables() []CustomVariables {
+	if o == nil {
+		return nil
+	}
+	return o.CustomVariables
 }
 
 func (o *BulkSendMessageRequestWithQuery) GetEmailTemplateID() string {
@@ -20,6 +47,13 @@ func (o *BulkSendMessageRequestWithQuery) GetEmailTemplateID() string {
 		return ""
 	}
 	return o.EmailTemplateID
+}
+
+func (o *BulkSendMessageRequestWithQuery) GetMustIncludeUnsubscribeLink() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.MustIncludeUnsubscribeLink
 }
 
 func (o *BulkSendMessageRequestWithQuery) GetRecipientQuery() string {

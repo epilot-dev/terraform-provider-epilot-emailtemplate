@@ -3,39 +3,165 @@
 package provider
 
 import (
+	"context"
 	"encoding/json"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/provider/typeconvert"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"math/big"
-	"time"
 )
 
-func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.EmailTemplateRequest {
+func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(ctx context.Context, resp *shared.EmailTemplateEntity) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.CreatedAt = types.StringValue(typeconvert.TimeToString(resp.CreatedAt))
+		r.ID = types.StringValue(resp.ID)
+		r.Manifest = make([]types.String, 0, len(resp.Manifest))
+		for _, v := range resp.Manifest {
+			r.Manifest = append(r.Manifest, types.StringValue(v))
+		}
+		r.Org = types.StringValue(resp.Org)
+		r.Purpose = make([]types.String, 0, len(resp.Purpose))
+		for _, v := range resp.Purpose {
+			r.Purpose = append(r.Purpose, types.StringValue(v))
+		}
+		r.Schema = types.StringValue(resp.Schema)
+		r.Tags = make([]types.String, 0, len(resp.Tags))
+		for _, v := range resp.Tags {
+			r.Tags = append(r.Tags, types.StringValue(v))
+		}
+		r.Title = types.StringValue(resp.Title)
+		r.UpdatedAt = types.StringValue(typeconvert.TimeToString(resp.UpdatedAt))
+		if resp.Attachments != nil {
+			r.Attachments = make([]jsontypes.Normalized, 0, len(resp.Attachments))
+			for _, attachmentsItem := range resp.Attachments {
+				var attachments jsontypes.Normalized
+
+				attachmentsResult, _ := json.Marshal(attachmentsItem)
+				attachments = jsontypes.NewNormalizedValue(string(attachmentsResult))
+
+				r.Attachments = append(r.Attachments, attachments)
+			}
+		}
+		r.Bcc = make([]jsontypes.Normalized, 0, len(resp.Bcc))
+		for _, bccItem := range resp.Bcc {
+			var bcc jsontypes.Normalized
+
+			bccResult, _ := json.Marshal(bccItem)
+			bcc = jsontypes.NewNormalizedValue(string(bccResult))
+
+			r.Bcc = append(r.Bcc, bcc)
+		}
+		r.Body = types.StringPointerValue(resp.Body)
+		r.BrandID = types.Float64PointerValue(resp.BrandID)
+		r.Cc = make([]jsontypes.Normalized, 0, len(resp.Cc))
+		for _, ccItem := range resp.Cc {
+			var cc jsontypes.Normalized
+
+			ccResult, _ := json.Marshal(ccItem)
+			cc = jsontypes.NewNormalizedValue(string(ccResult))
+
+			r.Cc = append(r.Cc, cc)
+		}
+		r.CreatedBy = types.StringPointerValue(resp.CreatedBy)
+		if resp.File == nil {
+			r.File = jsontypes.NewNormalizedNull()
+		} else {
+			fileResult, _ := json.Marshal(resp.File)
+			r.File = jsontypes.NewNormalizedValue(string(fileResult))
+		}
+		if resp.From == nil {
+			r.From = jsontypes.NewNormalizedNull()
+		} else {
+			fromResult, _ := json.Marshal(resp.From)
+			r.From = jsontypes.NewNormalizedValue(string(fromResult))
+		}
+		r.Name = types.StringValue(resp.Name)
+		r.Subject = types.StringPointerValue(resp.Subject)
+		r.SystemTemplate = types.BoolPointerValue(resp.SystemTemplate)
+		r.To = make([]jsontypes.Normalized, 0, len(resp.To))
+		for _, toItem := range resp.To {
+			var to jsontypes.Normalized
+
+			toResult, _ := json.Marshal(toItem)
+			to = jsontypes.NewNormalizedValue(string(toResult))
+
+			r.To = append(r.To, to)
+		}
+		r.UpdatedBy = types.StringPointerValue(resp.UpdatedBy)
+	}
+
+	return diags
+}
+
+func (r *EmailTemplateResourceModel) ToOperationsGetTemplateDetailRequest(ctx context.Context) (*operations.GetTemplateDetailRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.GetTemplateDetailRequest{
+		ID: id,
+	}
+
+	return &out, diags
+}
+
+func (r *EmailTemplateResourceModel) ToOperationsUpdateTemplateDetailRequest(ctx context.Context) (*operations.UpdateTemplateDetailRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	emailTemplateRequest, emailTemplateRequestDiags := r.ToSharedEmailTemplateRequest(ctx)
+	diags.Append(emailTemplateRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	var id string
+	id = r.ID.ValueString()
+
+	out := operations.UpdateTemplateDetailRequest{
+		EmailTemplateRequest: emailTemplateRequest,
+		ID:                   id,
+	}
+
+	return &out, diags
+}
+
+func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest(ctx context.Context) (*shared.EmailTemplateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
 	id := new(string)
 	if !r.ID.IsUnknown() && !r.ID.IsNull() {
 		*id = r.ID.ValueString()
 	} else {
 		id = nil
 	}
-	var manifest []string = []string{}
+	manifest := make([]string, 0, len(r.Manifest))
 	for _, manifestItem := range r.Manifest {
 		manifest = append(manifest, manifestItem.ValueString())
 	}
-	var purpose []string = []string{}
+	purpose := make([]string, 0, len(r.Purpose))
 	for _, purposeItem := range r.Purpose {
 		purpose = append(purpose, purposeItem.ValueString())
 	}
-	var tags []string = []string{}
+	tags := make([]string, 0, len(r.Tags))
 	for _, tagsItem := range r.Tags {
 		tags = append(tags, tagsItem.ValueString())
 	}
-	var attachments []interface{} = []interface{}{}
-	for _, attachmentsItem := range r.Attachments {
-		var attachmentsTmp interface{}
-		_ = json.Unmarshal([]byte(attachmentsItem.ValueString()), &attachmentsTmp)
-		attachments = append(attachments, attachmentsTmp)
+	var attachments []interface{}
+	if r.Attachments != nil {
+		attachments = make([]interface{}, 0, len(r.Attachments))
+		for _, attachmentsItem := range r.Attachments {
+			var attachmentsTmp interface{}
+			_ = json.Unmarshal([]byte(attachmentsItem.ValueString()), &attachmentsTmp)
+			attachments = append(attachments, attachmentsTmp)
+		}
 	}
-	var bcc []interface{} = []interface{}{}
+	bcc := make([]interface{}, 0, len(r.Bcc))
 	for _, bccItem := range r.Bcc {
 		var bccTmp interface{}
 		_ = json.Unmarshal([]byte(bccItem.ValueString()), &bccTmp)
@@ -49,11 +175,11 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	}
 	brandID := new(float64)
 	if !r.BrandID.IsUnknown() && !r.BrandID.IsNull() {
-		*brandID, _ = r.BrandID.ValueBigFloat().Float64()
+		*brandID = r.BrandID.ValueFloat64()
 	} else {
 		brandID = nil
 	}
-	var cc []interface{} = []interface{}{}
+	cc := make([]interface{}, 0, len(r.Cc))
 	for _, ccItem := range r.Cc {
 		var ccTmp interface{}
 		_ = json.Unmarshal([]byte(ccItem.ValueString()), &ccTmp)
@@ -85,7 +211,7 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 	} else {
 		systemTemplate = nil
 	}
-	var to []interface{} = []interface{}{}
+	to := make([]interface{}, 0, len(r.To))
 	for _, toItem := range r.To {
 		var toTmp interface{}
 		_ = json.Unmarshal([]byte(toItem.ValueString()), &toTmp)
@@ -116,79 +242,6 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest() *shared.Emai
 		To:             to,
 		UpdatedBy:      updatedBy,
 	}
-	return &out
-}
 
-func (r *EmailTemplateResourceModel) RefreshFromSharedEmailTemplateEntity(resp *shared.EmailTemplateEntity) {
-	if resp != nil {
-		r.CreatedAt = types.StringValue(resp.CreatedAt.Format(time.RFC3339Nano))
-		r.ID = types.StringValue(resp.ID)
-		r.Manifest = []types.String{}
-		for _, v := range resp.Manifest {
-			r.Manifest = append(r.Manifest, types.StringValue(v))
-		}
-		r.Org = types.StringValue(resp.Org)
-		r.Purpose = []types.String{}
-		for _, v := range resp.Purpose {
-			r.Purpose = append(r.Purpose, types.StringValue(v))
-		}
-		r.Schema = types.StringValue(resp.Schema)
-		r.Tags = []types.String{}
-		for _, v := range resp.Tags {
-			r.Tags = append(r.Tags, types.StringValue(v))
-		}
-		r.Title = types.StringValue(resp.Title)
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt.Format(time.RFC3339Nano))
-		r.Attachments = nil
-		for _, attachmentsItem := range resp.Attachments {
-			var attachments1 types.String
-			attachments1Result, _ := json.Marshal(attachmentsItem)
-			attachments1 = types.StringValue(string(attachments1Result))
-			r.Attachments = append(r.Attachments, attachments1)
-		}
-		r.Bcc = nil
-		for _, bccItem := range resp.Bcc {
-			var bcc1 types.String
-			bcc1Result, _ := json.Marshal(bccItem)
-			bcc1 = types.StringValue(string(bcc1Result))
-			r.Bcc = append(r.Bcc, bcc1)
-		}
-		r.Body = types.StringPointerValue(resp.Body)
-		if resp.BrandID != nil {
-			r.BrandID = types.NumberValue(big.NewFloat(float64(*resp.BrandID)))
-		} else {
-			r.BrandID = types.NumberNull()
-		}
-		r.Cc = nil
-		for _, ccItem := range resp.Cc {
-			var cc1 types.String
-			cc1Result, _ := json.Marshal(ccItem)
-			cc1 = types.StringValue(string(cc1Result))
-			r.Cc = append(r.Cc, cc1)
-		}
-		r.CreatedBy = types.StringPointerValue(resp.CreatedBy)
-		if resp.File == nil {
-			r.File = types.StringNull()
-		} else {
-			fileResult, _ := json.Marshal(resp.File)
-			r.File = types.StringValue(string(fileResult))
-		}
-		if resp.From == nil {
-			r.From = types.StringNull()
-		} else {
-			fromResult, _ := json.Marshal(resp.From)
-			r.From = types.StringValue(string(fromResult))
-		}
-		r.Name = types.StringValue(resp.Name)
-		r.Subject = types.StringPointerValue(resp.Subject)
-		r.SystemTemplate = types.BoolPointerValue(resp.SystemTemplate)
-		r.To = nil
-		for _, toItem := range resp.To {
-			var to1 types.String
-			to1Result, _ := json.Marshal(toItem)
-			to1 = types.StringValue(string(to1Result))
-			r.To = append(r.To, to1)
-		}
-		r.UpdatedBy = types.StringPointerValue(resp.UpdatedBy)
-	}
+	return &out, diags
 }

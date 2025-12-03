@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -23,33 +23,34 @@ func NewEmailTemplateDataSource() datasource.DataSource {
 
 // EmailTemplateDataSource is the data source implementation.
 type EmailTemplateDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.SDK
 }
 
 // EmailTemplateDataSourceModel describes the data model.
 type EmailTemplateDataSourceModel struct {
-	Attachments    []types.String `tfsdk:"attachments"`
-	Bcc            []types.String `tfsdk:"bcc"`
-	Body           types.String   `tfsdk:"body"`
-	BrandID        types.Number   `tfsdk:"brand_id"`
-	Cc             []types.String `tfsdk:"cc"`
-	CreatedAt      types.String   `tfsdk:"created_at"`
-	CreatedBy      types.String   `tfsdk:"created_by"`
-	File           types.String   `tfsdk:"file"`
-	From           types.String   `tfsdk:"from"`
-	ID             types.String   `tfsdk:"id"`
-	Manifest       []types.String `tfsdk:"manifest"`
-	Name           types.String   `tfsdk:"name"`
-	Org            types.String   `tfsdk:"org"`
-	Purpose        []types.String `tfsdk:"purpose"`
-	Schema         types.String   `tfsdk:"schema"`
-	Subject        types.String   `tfsdk:"subject"`
-	SystemTemplate types.Bool     `tfsdk:"system_template"`
-	Tags           []types.String `tfsdk:"tags"`
-	Title          types.String   `tfsdk:"title"`
-	To             []types.String `tfsdk:"to"`
-	UpdatedAt      types.String   `tfsdk:"updated_at"`
-	UpdatedBy      types.String   `tfsdk:"updated_by"`
+	Attachments    []jsontypes.Normalized `tfsdk:"attachments"`
+	Bcc            []jsontypes.Normalized `tfsdk:"bcc"`
+	Body           types.String           `tfsdk:"body"`
+	BrandID        types.Float64          `tfsdk:"brand_id"`
+	Cc             []jsontypes.Normalized `tfsdk:"cc"`
+	CreatedAt      types.String           `tfsdk:"created_at"`
+	CreatedBy      types.String           `tfsdk:"created_by"`
+	File           jsontypes.Normalized   `tfsdk:"file"`
+	From           jsontypes.Normalized   `tfsdk:"from"`
+	ID             types.String           `tfsdk:"id"`
+	Manifest       []types.String         `tfsdk:"manifest"`
+	Name           types.String           `tfsdk:"name"`
+	Org            types.String           `tfsdk:"org"`
+	Purpose        []types.String         `tfsdk:"purpose"`
+	Schema         types.String           `tfsdk:"schema"`
+	Subject        types.String           `tfsdk:"subject"`
+	SystemTemplate types.Bool             `tfsdk:"system_template"`
+	Tags           []types.String         `tfsdk:"tags"`
+	Title          types.String           `tfsdk:"title"`
+	To             []jsontypes.Normalized `tfsdk:"to"`
+	UpdatedAt      types.String           `tfsdk:"updated_at"`
+	UpdatedBy      types.String           `tfsdk:"updated_by"`
 }
 
 // Metadata returns the data source type name.
@@ -65,25 +66,25 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 		Attributes: map[string]schema.Attribute{
 			"attachments": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Email template attachments`,
 			},
 			"bcc": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Bcc`,
 			},
 			"body": schema.StringAttribute{
 				Computed:    true,
 				Description: `Body`,
 			},
-			"brand_id": schema.NumberAttribute{
+			"brand_id": schema.Float64Attribute{
 				Computed:    true,
 				Description: `Brand ID. Equal 0 if available for All brands`,
 			},
 			"cc": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Cc`,
 			},
 			"created_at": schema.StringAttribute{
@@ -95,10 +96,12 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 				Description: `Created by`,
 			},
 			"file": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Description: `Parsed as JSON.`,
 			},
 			"from": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Description: `Parsed as JSON.`,
 			},
@@ -148,7 +151,7 @@ func (r *EmailTemplateDataSource) Schema(ctx context.Context, req datasource.Sch
 			},
 			"to": schema.ListAttribute{
 				Computed:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `To`,
 			},
 			"updated_at": schema.StringAttribute{
@@ -201,13 +204,13 @@ func (r *EmailTemplateDataSource) Read(ctx context.Context, req datasource.ReadR
 		return
 	}
 
-	var id string
-	id = data.ID.ValueString()
+	request, requestDiags := data.ToOperationsGetTemplateDetailRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.GetTemplateDetailRequest{
-		ID: id,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.EmailTemplates.GetTemplateDetail(ctx, request)
+	res, err := r.client.EmailTemplates.GetTemplateDetail(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -219,10 +222,6 @@ func (r *EmailTemplateDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 404 {
-		resp.State.RemoveResource(ctx)
-		return
-	}
 	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
@@ -231,7 +230,11 @@ func (r *EmailTemplateDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateResponse.Entity)
+	resp.Diagnostics.Append(data.RefreshFromSharedEmailTemplateEntity(ctx, res.EmailTemplateResponse.Entity)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

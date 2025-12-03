@@ -10,36 +10,6 @@ import (
 	"time"
 )
 
-// ApproveAction - Type of approval action for the bulk message request.
-//
-// * APPROVE_WITH_CONSENT: Approve the bulk message request and send emails to queued recipients with consent
-// * APPROVE_ALL: Approve the bulk message request and send emails to all queued recipients, including those without consent
-type ApproveAction string
-
-const (
-	ApproveActionApproveWithConsent ApproveAction = "APPROVE_WITH_CONSENT"
-	ApproveActionApproveAll         ApproveAction = "APPROVE_ALL"
-)
-
-func (e ApproveAction) ToPointer() *ApproveAction {
-	return &e
-}
-func (e *ApproveAction) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "APPROVE_WITH_CONSENT":
-		fallthrough
-	case "APPROVE_ALL":
-		*e = ApproveAction(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ApproveAction: %v", v)
-	}
-}
-
 type Failed struct {
 	EmailTo []string `json:"email_to,omitempty"`
 	// Recipient Entity ID
@@ -107,8 +77,8 @@ const (
 )
 
 type Request struct {
-	BulkSendMessageRequest          *BulkSendMessageRequest
-	BulkSendMessageRequestWithQuery *BulkSendMessageRequestWithQuery
+	BulkSendMessageRequest          *BulkSendMessageRequest          `queryParam:"inline" name:"request"`
+	BulkSendMessageRequestWithQuery *BulkSendMessageRequestWithQuery `queryParam:"inline" name:"request"`
 
 	Type RequestType
 }
@@ -134,14 +104,14 @@ func CreateRequestBulkSendMessageRequestWithQuery(bulkSendMessageRequestWithQuer
 func (u *Request) UnmarshalJSON(data []byte) error {
 
 	var bulkSendMessageRequest BulkSendMessageRequest = BulkSendMessageRequest{}
-	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequest, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequest, "", true, nil); err == nil {
 		u.BulkSendMessageRequest = &bulkSendMessageRequest
 		u.Type = RequestTypeBulkSendMessageRequest
 		return nil
 	}
 
 	var bulkSendMessageRequestWithQuery BulkSendMessageRequestWithQuery = BulkSendMessageRequestWithQuery{}
-	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequestWithQuery, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequestWithQuery, "", true, nil); err == nil {
 		u.BulkSendMessageRequestWithQuery = &bulkSendMessageRequestWithQuery
 		u.Type = RequestTypeBulkSendMessageRequestWithQuery
 		return nil
@@ -241,12 +211,11 @@ func (e *BulkSendMessageJobStatus) UnmarshalJSON(data []byte) error {
 
 type BulkSendMessageJob struct {
 	// Type of approval action for the bulk message request.
-	//
 	// * APPROVE_WITH_CONSENT: Approve the bulk message request and send emails to queued recipients with consent
 	// * APPROVE_ALL: Approve the bulk message request and send emails to all queued recipients, including those without consent
 	//
 	ApproveAction *ApproveAction `json:"approve_action,omitempty"`
-	// Time when the bulk message action was last updated
+	// Time when the bulk message action was last approved
 	ApprovedAt *time.Time `json:"approved_at,omitempty"`
 	// Time when the bulk message action was created
 	CreatedAt *time.Time `json:"created_at,omitempty"`
@@ -278,7 +247,7 @@ type BulkSendMessageJob struct {
 	TaskToken *string `json:"task_token,omitempty"`
 	// Total number of emails generated and queued for sending
 	//
-	// Deprecated field: This will be removed in a future release, please migrate away from it as soon as possible.
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	TotalQueued *int64 `json:"total_queued,omitempty"`
 	// Time when the bulk message action was last updated
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
@@ -289,7 +258,7 @@ func (b BulkSendMessageJob) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkSendMessageJob) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &b, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"job_id", "request", "status"}); err != nil {
 		return err
 	}
 	return nil

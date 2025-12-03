@@ -62,6 +62,17 @@ type Three struct {
 	JobID string `json:"job_id"`
 }
 
+func (t Three) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *Three) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"job_id"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *Three) GetAction() *Action {
 	if o == nil {
 		return nil
@@ -85,9 +96,9 @@ const (
 )
 
 type BulkSendMessageRequestBody struct {
-	BulkSendMessageRequestWithQuery *shared.BulkSendMessageRequestWithQuery
-	BulkSendMessageRequest          *shared.BulkSendMessageRequest
-	Three                           *Three
+	BulkSendMessageRequestWithQuery *shared.BulkSendMessageRequestWithQuery `queryParam:"inline" name:"requestBody"`
+	BulkSendMessageRequest          *shared.BulkSendMessageRequest          `queryParam:"inline" name:"requestBody"`
+	Three                           *Three                                  `queryParam:"inline" name:"requestBody"`
 
 	Type BulkSendMessageRequestBodyType
 }
@@ -121,24 +132,24 @@ func CreateBulkSendMessageRequestBodyThree(three Three) BulkSendMessageRequestBo
 
 func (u *BulkSendMessageRequestBody) UnmarshalJSON(data []byte) error {
 
-	var three Three = Three{}
-	if err := utils.UnmarshalJSON(data, &three, "", true, true); err == nil {
-		u.Three = &three
-		u.Type = BulkSendMessageRequestBodyTypeThree
-		return nil
-	}
-
 	var bulkSendMessageRequestWithQuery shared.BulkSendMessageRequestWithQuery = shared.BulkSendMessageRequestWithQuery{}
-	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequestWithQuery, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequestWithQuery, "", true, nil); err == nil {
 		u.BulkSendMessageRequestWithQuery = &bulkSendMessageRequestWithQuery
 		u.Type = BulkSendMessageRequestBodyTypeBulkSendMessageRequestWithQuery
 		return nil
 	}
 
 	var bulkSendMessageRequest shared.BulkSendMessageRequest = shared.BulkSendMessageRequest{}
-	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequest, "", true, true); err == nil {
+	if err := utils.UnmarshalJSON(data, &bulkSendMessageRequest, "", true, nil); err == nil {
 		u.BulkSendMessageRequest = &bulkSendMessageRequest
 		u.Type = BulkSendMessageRequestBodyTypeBulkSendMessageRequest
+		return nil
+	}
+
+	var three Three = Three{}
+	if err := utils.UnmarshalJSON(data, &three, "", true, nil); err == nil {
+		u.Three = &three
+		u.Type = BulkSendMessageRequestBodyTypeThree
 		return nil
 	}
 

@@ -2,15 +2,42 @@
 
 package shared
 
+import (
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/utils"
+)
+
 // BulkSendMessageRequest - It takes a list of entity ids, treating each as a separate mainEntity to construct individual messages.
 // For e.g; if there some opportunityIds are provided, then each opportunityId is treated as a separate mainEntity to construct individual messages.
 type BulkSendMessageRequest struct {
+	// Custom variables to be replaced in the email template
+	CustomVariables []CustomVariables `json:"custom_variables,omitempty"`
 	// ID of email template to use for sending bulk emails
 	EmailTemplateID string `json:"email_template_id"`
+	// If true then include unsubscribe link in the email body
+	//
+	MustIncludeUnsubscribeLink *bool `default:"false" json:"must_include_unsubscribe_link"`
 	// List of entity ids to use as recipients
 	RecipientIds []string `json:"recipient_ids"`
 	// When true, it lets to send only the email by skip creating the thread & message entities.
 	SkipCreatingEntities *bool `json:"skip_creating_entities,omitempty"`
+}
+
+func (b BulkSendMessageRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BulkSendMessageRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"email_template_id", "recipient_ids"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *BulkSendMessageRequest) GetCustomVariables() []CustomVariables {
+	if o == nil {
+		return nil
+	}
+	return o.CustomVariables
 }
 
 func (o *BulkSendMessageRequest) GetEmailTemplateID() string {
@@ -18,6 +45,13 @@ func (o *BulkSendMessageRequest) GetEmailTemplateID() string {
 		return ""
 	}
 	return o.EmailTemplateID
+}
+
+func (o *BulkSendMessageRequest) GetMustIncludeUnsubscribeLink() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.MustIncludeUnsubscribeLink
 }
 
 func (o *BulkSendMessageRequest) GetRecipientIds() []string {

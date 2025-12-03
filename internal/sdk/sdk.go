@@ -2,9 +2,12 @@
 
 package sdk
 
+// Generated from OpenAPI doc version 1.0.0-RFC and generator version 2.694.1
+
 import (
 	"context"
 	"fmt"
+	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/config"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/hooks"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/internal/utils"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/shared"
@@ -18,7 +21,7 @@ var ServerList = []string{
 	"https://email-template.sls.epilot.io",
 }
 
-// HTTPClient provides an interface for suplying the SDK with a custom HTTP client
+// HTTPClient provides an interface for supplying the SDK with a custom HTTP client
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
@@ -44,36 +47,15 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-type sdkConfiguration struct {
-	Client            HTTPClient
-	Security          func(context.Context) (interface{}, error)
-	ServerURL         string
-	ServerIndex       int
-	Language          string
-	OpenAPIDocVersion string
-	SDKVersion        string
-	GenVersion        string
-	UserAgent         string
-	RetryConfig       *retry.Config
-	Hooks             *hooks.Hooks
-	Timeout           *time.Duration
-}
-
-func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
-	if c.ServerURL != "" {
-		return c.ServerURL, nil
-	}
-
-	return ServerList[c.ServerIndex], nil
-}
-
 // SDK - Email template API: Email template API service
 type SDK struct {
+	SDKVersion string
 	// Email template service
 	EmailTemplates *EmailTemplates
 	Variables      *Variables
 
-	sdkConfiguration sdkConfiguration
+	sdkConfiguration config.SDKConfiguration
+	hooks            *hooks.Hooks
 }
 
 type SDKOption func(*SDK)
@@ -146,14 +128,12 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
-		sdkConfiguration: sdkConfiguration{
-			Language:          "go",
-			OpenAPIDocVersion: "1.0.0-RFC",
-			SDKVersion:        "0.0.1",
-			GenVersion:        "2.438.15",
-			UserAgent:         "speakeasy-sdk/go 0.0.1 2.438.15 1.0.0-RFC github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk",
-			Hooks:             hooks.New(),
+		SDKVersion: "0.8.0",
+		sdkConfiguration: config.SDKConfiguration{
+			UserAgent:  "speakeasy-sdk/terraform 0.8.0 2.694.1 1.0.0-RFC github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk",
+			ServerList: ServerList,
 		},
+		hooks: hooks.New(),
 	}
 	for _, opt := range opts {
 		opt(sdk)
@@ -166,14 +146,13 @@ func New(opts ...SDKOption) *SDK {
 
 	currentServerURL, _ := sdk.sdkConfiguration.GetServerDetails()
 	serverURL := currentServerURL
-	serverURL, sdk.sdkConfiguration.Client = sdk.sdkConfiguration.Hooks.SDKInit(currentServerURL, sdk.sdkConfiguration.Client)
-	if serverURL != currentServerURL {
+	serverURL, sdk.sdkConfiguration.Client = sdk.hooks.SDKInit(currentServerURL, sdk.sdkConfiguration.Client)
+	if currentServerURL != serverURL {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.EmailTemplates = newEmailTemplates(sdk.sdkConfiguration)
-
-	sdk.Variables = newVariables(sdk.sdkConfiguration)
+	sdk.EmailTemplates = newEmailTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Variables = newVariables(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

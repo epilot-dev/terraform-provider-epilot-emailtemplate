@@ -7,27 +7,6 @@ import (
 	"fmt"
 )
 
-type CustomVariables struct {
-	// Value to be Replaced
-	Value *string `json:"value,omitempty"`
-	// Template Variable Name
-	Variable *string `json:"variable,omitempty"`
-}
-
-func (o *CustomVariables) GetValue() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Value
-}
-
-func (o *CustomVariables) GetVariable() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Variable
-}
-
 type Language string
 
 const (
@@ -55,6 +34,7 @@ func (e *Language) UnmarshalJSON(data []byte) error {
 }
 
 type VariableParameters struct {
+	// Custom variables to be replaced in the email template
 	CustomVariables []CustomVariables `json:"custom_variables,omitempty"`
 	Language        *Language         `json:"language,omitempty"`
 	// The main entity ID. Use main entity in order to use the variable without schema slug prefix - or just pass directly to other object ID.

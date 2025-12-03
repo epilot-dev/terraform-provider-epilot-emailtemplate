@@ -6,8 +6,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk"
-	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/sdk/models/operations"
 	"github.com/epilot-dev/terraform-provider-epilot-emailtemplate/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -27,33 +27,34 @@ func NewEmailTemplateResource() resource.Resource {
 
 // EmailTemplateResource defines the resource implementation.
 type EmailTemplateResource struct {
+	// Provider configured SDK client.
 	client *sdk.SDK
 }
 
 // EmailTemplateResourceModel describes the resource data model.
 type EmailTemplateResourceModel struct {
-	Attachments    []types.String `tfsdk:"attachments"`
-	Bcc            []types.String `tfsdk:"bcc"`
-	Body           types.String   `tfsdk:"body"`
-	BrandID        types.Number   `tfsdk:"brand_id"`
-	Cc             []types.String `tfsdk:"cc"`
-	CreatedAt      types.String   `tfsdk:"created_at"`
-	CreatedBy      types.String   `tfsdk:"created_by"`
-	File           types.String   `tfsdk:"file"`
-	From           types.String   `tfsdk:"from"`
-	ID             types.String   `tfsdk:"id"`
-	Manifest       []types.String `tfsdk:"manifest"`
-	Name           types.String   `tfsdk:"name"`
-	Org            types.String   `tfsdk:"org"`
-	Purpose        []types.String `tfsdk:"purpose"`
-	Schema         types.String   `tfsdk:"schema"`
-	Subject        types.String   `tfsdk:"subject"`
-	SystemTemplate types.Bool     `tfsdk:"system_template"`
-	Tags           []types.String `tfsdk:"tags"`
-	Title          types.String   `tfsdk:"title"`
-	To             []types.String `tfsdk:"to"`
-	UpdatedAt      types.String   `tfsdk:"updated_at"`
-	UpdatedBy      types.String   `tfsdk:"updated_by"`
+	Attachments    []jsontypes.Normalized `tfsdk:"attachments"`
+	Bcc            []jsontypes.Normalized `tfsdk:"bcc"`
+	Body           types.String           `tfsdk:"body"`
+	BrandID        types.Float64          `tfsdk:"brand_id"`
+	Cc             []jsontypes.Normalized `tfsdk:"cc"`
+	CreatedAt      types.String           `tfsdk:"created_at"`
+	CreatedBy      types.String           `tfsdk:"created_by"`
+	File           jsontypes.Normalized   `tfsdk:"file"`
+	From           jsontypes.Normalized   `tfsdk:"from"`
+	ID             types.String           `tfsdk:"id"`
+	Manifest       []types.String         `tfsdk:"manifest"`
+	Name           types.String           `tfsdk:"name"`
+	Org            types.String           `tfsdk:"org"`
+	Purpose        []types.String         `tfsdk:"purpose"`
+	Schema         types.String           `tfsdk:"schema"`
+	Subject        types.String           `tfsdk:"subject"`
+	SystemTemplate types.Bool             `tfsdk:"system_template"`
+	Tags           []types.String         `tfsdk:"tags"`
+	Title          types.String           `tfsdk:"title"`
+	To             []jsontypes.Normalized `tfsdk:"to"`
+	UpdatedAt      types.String           `tfsdk:"updated_at"`
+	UpdatedBy      types.String           `tfsdk:"updated_by"`
 }
 
 func (r *EmailTemplateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -67,7 +68,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			"attachments": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Email template attachments`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -76,7 +77,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			"bcc": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Bcc`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -87,7 +88,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Optional:    true,
 				Description: `Body`,
 			},
-			"brand_id": schema.NumberAttribute{
+			"brand_id": schema.Float64Attribute{
 				Computed:    true,
 				Optional:    true,
 				Description: `Brand ID. Equal 0 if available for All brands`,
@@ -95,7 +96,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			"cc": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `Cc`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -114,20 +115,16 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Created by`,
 			},
 			"file": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Optional:    true,
 				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
 			},
 			"from": schema.StringAttribute{
+				CustomType:  jsontypes.NormalizedType{},
 				Computed:    true,
 				Optional:    true,
 				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -181,7 +178,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			"to": schema.ListAttribute{
 				Computed:    true,
 				Optional:    true,
-				ElementType: types.StringType,
+				ElementType: jsontypes.NormalizedType{},
 				Description: `To`,
 				Validators: []validator.List{
 					listvalidator.ValueStringsAre(validators.IsValidJSON()),
@@ -241,7 +238,12 @@ func (r *EmailTemplateResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	request := data.ToSharedEmailTemplateRequest()
+	request, requestDiags := data.ToSharedEmailTemplateRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	res, err := r.client.EmailTemplates.SaveTemplate(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -262,8 +264,17 @@ func (r *EmailTemplateResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateEntity)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	resp.Diagnostics.Append(data.RefreshFromSharedEmailTemplateEntity(ctx, res.EmailTemplateEntity)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -287,13 +298,13 @@ func (r *EmailTemplateResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
-	var id string
-	id = data.ID.ValueString()
+	request, requestDiags := data.ToOperationsGetTemplateDetailRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.GetTemplateDetailRequest{
-		ID: id,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.EmailTemplates.GetTemplateDetail(ctx, request)
+	res, err := r.client.EmailTemplates.GetTemplateDetail(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -317,7 +328,11 @@ func (r *EmailTemplateResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateResponse.Entity)
+	resp.Diagnostics.Append(data.RefreshFromSharedEmailTemplateEntity(ctx, res.EmailTemplateResponse.Entity)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -337,15 +352,13 @@ func (r *EmailTemplateResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	emailTemplateRequest := data.ToSharedEmailTemplateRequest()
-	var id string
-	id = data.ID.ValueString()
+	request, requestDiags := data.ToOperationsUpdateTemplateDetailRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
 
-	request := operations.UpdateTemplateDetailRequest{
-		EmailTemplateRequest: emailTemplateRequest,
-		ID:                   id,
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	res, err := r.client.EmailTemplates.UpdateTemplateDetail(ctx, request)
+	res, err := r.client.EmailTemplates.UpdateTemplateDetail(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -365,8 +378,17 @@ func (r *EmailTemplateResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	data.RefreshFromSharedEmailTemplateEntity(res.EmailTemplateEntity)
-	refreshPlan(ctx, plan, &data, resp.Diagnostics)
+	resp.Diagnostics.Append(data.RefreshFromSharedEmailTemplateEntity(ctx, res.EmailTemplateEntity)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

@@ -59,7 +59,7 @@ terraform {
   required_providers {
     epilot-emailtemplate = {
       source  = "epilot-dev/epilot-emailtemplate"
-      version = "0.6.7"
+      version = "0.8.0"
     }
   }
 }
@@ -120,11 +120,27 @@ Email template API: Email template API service
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [epilot-emailtemplate](#epilot-emailtemplate)
+  * [Installation](#installation)
+  * [Testing the provider locally](#testing-the-provider-locally)
+  * [Authentication](#authentication)
+  * [Available Resources and Data Sources](#available-resources-and-data-sources)
 
-* [Installation](#installation)
-* [Available Resources and Data Sources](#available-resources-and-data-sources)
-* [Testing the provider locally](#testing-the-provider-locally)
 <!-- End Table of Contents [toc] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+This provider supports authentication configuration via provider configuration.
+
+Available configuration:
+
+| Provider Attribute | Description |
+|---|---|
+| `epilot_auth` | Authorization header with epilot OAuth2 bearer token. |
+| `epilot_org` | Overrides the target organization to allow shared tenant access. |
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources

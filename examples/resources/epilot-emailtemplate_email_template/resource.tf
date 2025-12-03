@@ -19,12 +19,13 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   ]
   name = "Order confirmation"
   purpose = [
-    "..."
+    "a0ec23ac-12f8-4d89-9a63-91cba3787f2a",
+    "310cd388-2f15-4b5b-8f98-ca14c1e03304",
   ]
   subject         = "We have received your order!"
   system_template = false
   tags = [
-    "..."
+    "template",
   ]
   to = [
     "{ \"see\": \"documentation\" }"

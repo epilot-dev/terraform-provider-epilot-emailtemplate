@@ -10,6 +10,9 @@ import (
 
 type ReplaceVariablesAsyncRequestBody struct {
 	EmailTemplateID *string `json:"email_template_id,omitempty"`
+	// If true then include unsubscribe link in the email body
+	//
+	MustIncludeUnsubscribeLink *bool `default:"false" json:"must_include_unsubscribe_link"`
 	// If true then skip document generation. This is useful when you want to replace html variables only. Speeds up the process.
 	//
 	SkipDocumentGeneration *bool                      `default:"false" json:"skip_document_generation"`
@@ -21,7 +24,7 @@ func (r ReplaceVariablesAsyncRequestBody) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ReplaceVariablesAsyncRequestBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -32,6 +35,13 @@ func (o *ReplaceVariablesAsyncRequestBody) GetEmailTemplateID() *string {
 		return nil
 	}
 	return o.EmailTemplateID
+}
+
+func (o *ReplaceVariablesAsyncRequestBody) GetMustIncludeUnsubscribeLink() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.MustIncludeUnsubscribeLink
 }
 
 func (o *ReplaceVariablesAsyncRequestBody) GetSkipDocumentGeneration() *bool {
