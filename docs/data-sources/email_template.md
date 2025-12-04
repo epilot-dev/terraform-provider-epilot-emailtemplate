@@ -36,6 +36,7 @@ data "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `created_by` (String) Created by
 - `file` (String) Parsed as JSON.
 - `from` (String) Parsed as JSON.
+- `json_template` (String) This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.
 - `manifest` (List of String) Manifest ID used to create/update the entity
 - `name` (String) name
 - `org` (String) Ivy Organization ID the entity belongs to

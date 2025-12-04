@@ -79,6 +79,7 @@ Remember to add default content of template to [system-template.ts](https://gitl
 ### Read-Only
 
 - `created_at` (String) Created date
+- `json_template` (String) This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.
 - `org` (String) Ivy Organization ID the entity belongs to
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title

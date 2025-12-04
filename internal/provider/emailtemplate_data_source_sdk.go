@@ -79,6 +79,7 @@ func (r *EmailTemplateDataSourceModel) RefreshFromSharedEmailTemplateEntity(ctx 
 			r.From = jsontypes.NewNormalizedValue(string(fromResult))
 		}
 		r.ID = types.StringValue(resp.ID)
+		r.JSONTemplate = types.StringPointerValue(resp.JSONTemplate)
 		r.Name = types.StringValue(resp.Name)
 		r.Subject = types.StringPointerValue(resp.Subject)
 		r.SystemTemplate = types.BoolPointerValue(resp.SystemTemplate)

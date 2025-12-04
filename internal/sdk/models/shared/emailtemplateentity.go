@@ -40,6 +40,8 @@ type EmailTemplateEntity struct {
 	CreatedBy *string `json:"created_by,omitempty"`
 	File      any     `json:"file,omitempty"`
 	From      any     `json:"from,omitempty"`
+	// This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.
+	JSONTemplate *string `json:"json_template,omitempty"`
 	// name
 	Name string `json:"name"`
 	// Subject
@@ -182,6 +184,13 @@ func (o *EmailTemplateEntity) GetFrom() any {
 		return nil
 	}
 	return o.From
+}
+
+func (o *EmailTemplateEntity) GetJSONTemplate() *string {
+	if o == nil {
+		return nil
+	}
+	return o.JSONTemplate
 }
 
 func (o *EmailTemplateEntity) GetName() string {

@@ -43,6 +43,7 @@ type EmailTemplateResourceModel struct {
 	File           jsontypes.Normalized   `tfsdk:"file"`
 	From           jsontypes.Normalized   `tfsdk:"from"`
 	ID             types.String           `tfsdk:"id"`
+	JSONTemplate   types.String           `tfsdk:"json_template"`
 	Manifest       []types.String         `tfsdk:"manifest"`
 	Name           types.String           `tfsdk:"name"`
 	Org            types.String           `tfsdk:"org"`
@@ -130,6 +131,10 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 				Computed:    true,
 				Optional:    true,
 				Description: `Template entity ID`,
+			},
+			"json_template": schema.StringAttribute{
+				Computed:    true,
+				Description: `This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.`,
 			},
 			"manifest": schema.ListAttribute{
 				Computed:    true,
