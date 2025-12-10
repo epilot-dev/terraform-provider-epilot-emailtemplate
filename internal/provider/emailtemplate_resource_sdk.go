@@ -200,6 +200,12 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest(ctx context.Co
 	if !r.From.IsUnknown() && !r.From.IsNull() {
 		_ = json.Unmarshal([]byte(r.From.ValueString()), &from)
 	}
+	jsonTemplate := new(string)
+	if !r.JSONTemplate.IsUnknown() && !r.JSONTemplate.IsNull() {
+		*jsonTemplate = r.JSONTemplate.ValueString()
+	} else {
+		jsonTemplate = nil
+	}
 	var name string
 	name = r.Name.ValueString()
 
@@ -237,6 +243,7 @@ func (r *EmailTemplateResourceModel) ToSharedEmailTemplateRequest(ctx context.Co
 		CreatedBy:      createdBy,
 		File:           file,
 		From:           from,
+		JSONTemplate:   jsonTemplate,
 		Name:           name,
 		Subject:        subject,
 		SystemTemplate: systemTemplate,

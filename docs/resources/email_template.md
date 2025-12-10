@@ -25,10 +25,11 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
   cc = [
     "{ \"see\": \"documentation\" }"
   ]
-  created_by = 1234
-  file       = "{ \"see\": \"documentation\" }"
-  from       = "{ \"see\": \"documentation\" }"
-  id         = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
+  created_by    = 1234
+  file          = "{ \"see\": \"documentation\" }"
+  from          = "{ \"see\": \"documentation\" }"
+  id            = "cd7809ba-a111-4dd9-8d15-18eb4de0faed"
+  json_template = "...my_json_template..."
   manifest = [
     "123e4567-e89b-12d3-a456-426614174000"
   ]
@@ -68,6 +69,7 @@ resource "epilot-emailtemplate_email_template" "my_emailtemplate" {
 - `file` (String) Parsed as JSON.
 - `from` (String) Parsed as JSON.
 - `id` (String) Template entity ID
+- `json_template` (String) This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.
 - `manifest` (List of String) Manifest ID used to create/update the entity
 - `purpose` (List of String) Entity Purposes
 - `system_template` (Boolean) If template is created by system (Double Opt-in, CMD invitation,...) then true, and some attributes can not be edited such as Name, To,...
@@ -79,7 +81,6 @@ Remember to add default content of template to [system-template.ts](https://gitl
 ### Read-Only
 
 - `created_at` (String) Created date
-- `json_template` (String) This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.
 - `org` (String) Ivy Organization ID the entity belongs to
 - `schema` (String) URL-friendly identifier for the entity schema
 - `title` (String) Entity title

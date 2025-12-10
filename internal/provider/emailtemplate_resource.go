@@ -134,6 +134,7 @@ func (r *EmailTemplateResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"json_template": schema.StringAttribute{
 				Computed:    true,
+				Optional:    true,
 				Description: `This field is used to store JSON templates. If this field is populated, then the Body html is derived from the JSON.`,
 			},
 			"manifest": schema.ListAttribute{
